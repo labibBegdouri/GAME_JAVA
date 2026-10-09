@@ -1,5 +1,7 @@
 package SAC;
 
-abstract public class Consommable{
+public interface Consommable{
     public abstract  void consommer(Item item);
 }
+
+
