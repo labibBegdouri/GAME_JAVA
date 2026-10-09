@@ -12,6 +12,12 @@ abstract class  Item{
         this.size=size;
     }
 
+    public  Item(String nom,int id){
+        this.nom=nom;
+        this.id=id;
+        this.size=1;
+    }
+
 
 
     public boolean isEqual(Item item){
