@@ -71,8 +71,9 @@ class Allie extends Personnage {
     private boolean trahison;
     private Arme a;
 
-    public Allie(int pvInit, Arme a){
+    public Allie(int pvInit, boolean trahison, Arme a){
         super(pvInit);
+        this.trahison = trahison;
         this.a = a;
     }
 }
