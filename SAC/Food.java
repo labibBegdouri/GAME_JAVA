@@ -1,6 +1,6 @@
 package SAC;
 
-abstract public class Food extends Item  {
+public class Food extends Item  {
     private int bonus;
 
     public Food(String nom, int id, int size, int nb, int bonus){

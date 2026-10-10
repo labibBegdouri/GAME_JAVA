@@ -1,7 +1,7 @@
 package SAC;
 
 
-abstract public class  Item{
+public class  Item{
     private String nom;
     private int id; // or string ????
     private int size;
