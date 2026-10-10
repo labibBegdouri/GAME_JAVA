@@ -1,4 +1,8 @@
 .metals
 .vscode
 *.json
+SAC
+personnages
+*.pdf
+.gitignore
 
