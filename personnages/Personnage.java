@@ -1,3 +1,5 @@
+import SAC.*;
+
 public abstract class Personnage {
     static int pvInit;
     private int pv;
@@ -32,11 +34,11 @@ public abstract class Personnage {
 
     public void attaquer(Personnage victime, Arme a) {
         if (!victime.getEstMort()){
-            if (victime.getPv() <= a.degat){
+            if (victime.getPv() <= a.getDegat()){
                 victime.setPv(0);
                 victime.setEstMort(true);
             } else {
-                victime.setPv(victime.getPv() - a.degat);
+                victime.setPv(victime.getPv() - a.getDegat());
             }
         }
     }
@@ -52,7 +54,7 @@ class Heros extends Personnage{
 
     public void consommer(Food f) {
         // Si tu consommes qlq chose avec la barre de vie rempli, tu vas perdre ton consommable
-        int newPv = this.getPv() + f.bonus;
+        int newPv = this.getPv() + f.getBonus();
         this.setPv(newPv);
     }
 }
@@ -61,7 +63,7 @@ class Monstre extends Personnage{
     private Arme a;
     public Monstre(int pvInit, Arme a) {
         super(pvInit);
-        this.arme = a;
+        this.a = a;
     }
 }
 
@@ -71,6 +73,6 @@ class Allie extends Personnage {
 
     public Allie(int pvInit, Arme a){
         super(pvInit);
-        this.arme = a;
+        this.a = a;
     }
 }
