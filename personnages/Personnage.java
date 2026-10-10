@@ -32,11 +32,11 @@ public abstract class Personnage {
 
     public void attaquer(Personnage victime, Arme a) {
         if (!victime.getEstMort()){
-            if (this.getPv() <= a.degat){
-                this.setPv(0);
-                this.setEstMort(true);
+            if (victime.getPv() <= a.degat){
+                victime.setPv(0);
+                victime.setEstMort(true);
             } else {
-                this.setPv(this.getPv() - a.degat);
+                victime.setPv(victime.getPv() - a.degat);
             }
         }
     }
@@ -52,7 +52,7 @@ class Heros extends Personnage{
 
     public void consommer(Food f) {
         // Si tu consommes qlq chose avec la barre de vie rempli, tu vas perdre ton consommable
-        int newPv = this.getPv() + food.bonus;
+        int newPv = this.getPv() + f.bonus;
         this.setPv(newPv);
     }
 }
