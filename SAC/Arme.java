@@ -8,7 +8,7 @@ public class Arme extends Item {
         this.degat=degat;
     }
 
-    int getDegat(){
+    public int getDegat(){
         return this.degat;
     }
     
