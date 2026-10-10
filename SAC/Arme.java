@@ -8,28 +8,28 @@ public class Arme extends Item {
         this.degat=degat;
     }
 
-    int getDegat(){
+    public int getDegat(){
         return this.degat;
     }
     
-    void setDegat(int degat){
+    public void setDegat(int degat){
         this.degat=degat;
     }   
 
-    void addDegat(int bonus){
+    public void addDegat(int bonus){
         this.degat=degat+bonus;
     } 
     
 
-    int getDefense(){
+    public int getDefense(){
         return this.defense;
     }
     
-    void setDefense(int defense){
+    public void setDefense(int defense){
         this.defense=defense;
     }   
 
-    void addDefense(int bonus){
+    public void addDefense(int bonus){
         this.defense=this.defense+bonus;
     } 
 
