@@ -1,9 +1,8 @@
 package SAC;
 
-abstract public class Arme extends Item {
+public class Arme extends Item {
     private int degat;
-    abstract void attaquer();
-    abstract void defendre();
+    private int defense;
     public  Arme(String nom,int id,int size,int degat){
         super(nom,id,size);
         this.degat=degat;
@@ -21,6 +20,18 @@ abstract public class Arme extends Item {
         this.degat=degat+bonus;
     } 
     
+
+    int getDefense(){
+        return this.defense;
+    }
+    
+    void setDefense(int defense){
+        this.defense=defense;
+    }   
+
+    void addDefense(int bonus){
+        this.defense=this.defense+bonus;
+    } 
 
     
 }
