@@ -3,34 +3,52 @@ package SAC;
 import java.util.*;
 
 public class Sac {
-    private int capacité;
+    private int capacity;
 
-    private int remplissage;
+    private int fullness=0;
 
     ArrayList<Item> items = new ArrayList<Item>();
 
 
 
-    public Sac(int capacité){
-        this.capacité=capacité;
+    public Sac(int capacity){
+        this.capacity=capacity;
+    }
+    public Sac(int capacity,int fullness){
+        this.capacity=capacity;
+        this.fullness=fullness;
     }
 
-    public int get_remplissage(){
-        return  this.remplissage;
+    public int getFullness(){
+        return  this.fullness;
+    }
+    public void addFullness(int extra){
+        this.fullness+=extra;
+    }
+    public void setFullness(int fullness){
+        this.fullness=fullness;
     }
 
-    public void add_capacité(int plus){
-        this.capacité+=plus;
+    public int getCapacity(){
+        return  this.capacity;
     }
+    public void addCapacity(int extra){
+        this.capacity+=extra;
+    }
+    public void setCapacity(int capacity){
+        this.capacity=capacity;
+    }
+
+
 
 
     public boolean  collect(Item item){
-        if ((remplissage+item.size)>this.capacité){
+        if ((getFullness()+item.getSize())>getCapacity()){
             return false;
         }
 
         this.items.add(item);
-        remplissage+=item.size;
+        addFullness(item.getSize());
         return true;
 
     }

@@ -1,7 +1,7 @@
 package SAC;
 
 abstract public class Food extends Item  {
-    int bonus;
+    private int bonus;
 
     public Food(String nom, int id, int size, int nb, int bonus){
             super(nom,id,size);
@@ -13,6 +13,14 @@ abstract public class Food extends Item  {
             super(nom,id);
             this.bonus=bonus;
 
+    }
+
+    public int getBonus(){
+        return this.bonus;
+    }
+
+    public int setBonus(){
+        return this.bonus;
     }
 
 

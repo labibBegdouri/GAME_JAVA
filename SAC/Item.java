@@ -2,9 +2,9 @@ package SAC;
 
 
 abstract class  Item{
-    String nom;
-    int id;
-    int size;
+    private String nom;
+    private int id; // or string ????
+    private int size;
 
     public  Item(String nom,int id,int size){
         this.nom=nom;
@@ -25,6 +25,30 @@ abstract class  Item{
             return true;
         }
         return false;
+    }
+
+    public String getNom(){
+        return this.nom;
+    }
+    public void setNom(String nom){
+        this.nom=nom;
+    }
+
+
+    public int getId(){
+        return this.id;
+    }
+    public void setId(int id){
+        this.id=id;
+    }
+
+
+    
+    public int getSize(){
+        return this.size;
+    }
+    public void setSize(int size ){
+        this.size=size;
     }
 
 
