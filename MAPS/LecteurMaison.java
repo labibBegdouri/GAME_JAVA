@@ -1,3 +1,5 @@
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import SAC.*;
 
 
 public class LecteurMaison{
@@ -52,55 +55,82 @@ public class LecteurMaison{
 
         // analyse de la map pour relier les classes
 
-
-
-
-        
+        analyser(map,nbLignes,nb_colones,maison);
         
         return maison;
     }
+
+    private void analyser(String[][] map, int nbLignes, int nbColonnes, Maison maison) {
+        
+    }
+
+    private void traiterContenuCase(String contenu, Salle salle, Maison maison){
+        String[] contenuSplit = contenu.split(":");
+        String type = contenuSplit[0];
+
+        switch (type) {
+            case "REVEIL":
+                maison.setSalleReveil(salle.getSalleNom());
+                break;
+            case "TRESOR":
+                maison.setSalleTresor(salle.getSalleNom());
+                break;
+            case "ARME":
+                if (contenuSplit.length >= 5) {
+                     Arme a = new Arme(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), Integer.parseInt(contenuSplit[4]));
+                     salle.deposerObjet(a);
+                }
+                break;
+            case "FOOD":
+                // Syntaxe attendue -> FOOD:Nom:Id:Size:Bonus (ex: FOOD:POMME:1:1:15)
+                if (contenuSplit.length >= 5) {
+                    Food f = new Food(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), 1, Integer.parseInt(contenuSplit[4]));
+                    salle.deposerObjet(f);
+                }
+                break;
+            case "MONSTRE":
+                if (contenuSplit.length >= 4) {
+                        int pvInit = Integer.parseInt(contenuSplit[1]);
+                        String nomArme = contenuSplit[2];
+                        int degatArme = Integer.parseInt(contenuSplit[3]);
+                    
+                        Arme armeMonstre = new Arme(nomArme, 0, 1, degatArme);
+                        Monstre m = new Monstre(pvInit, armeMonstre);
+                        salle.ajouterPersonnage(m);
+                    }
+                    break;
+            case "ALLIE":
+                if (contenuSplit.length >= 5) {
+                    int pvInit = Integer.parseInt(contenuSplit[1]);
+                    String nomArme = contenuSplit[3];
+                    int degatArme = Integer.parseInt(contenuSplit[4]);
+                    
+                    Arme armeAllie = new Arme(nomArme, 0, 1, degatArme);
+                    boolean trahison = Boolean.parseBoolean(contenuSplit[2]);
+                    Allie allie = new Allie(pvInit, trahison, armeAllie);
+                    salle.ajouterPersonnage(allie);
+                }
+                break;
+            case "CLE":
+                if (contenuSplit.length >= 5) {
+                    Cle c = new Cle(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), contenuSplit[4]);
+                    salle.deposerObjet(c);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private Porte creerPorte(String contenu) {
+        String[] parts = contenu.split(":");
+        if (parts.length >= 3 && parts[1].equals("F")) {
+            return new Porte(parts[2]);
+        }
+        return new Porte();
+    }
 }
 
-
-
-/*class Position {
-    private int x;
-    private int y;
-    private int z; //Etage
-
-    public Position(int x, int y, int z){
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public int getX(){
-        return this.x;
-    }
-
-    public int getY(){
-        return this.y;
-    }
-
-    public int getZ(){
-        return this.z;
-    }
-
-    public boolean equals(Object other){
-        if (other instanceof Position){
-            Position o = (Position) other;
-            return this.x == o.getX() && 
-                   this.y == o.getY() &&
-                    this.z == o.getZ();
-        }
-        return false;
-    }
-
-    public int hashCode(){  //A rediscuter hh
-        return x+y+z;
-    }
-
-}*/
 
 class Porte{
 
@@ -165,12 +195,14 @@ enum Direction{ //Cas seule etage
 }
 class Salle{
     private String nom;
-    private List<Consommables> objetParSol;
+    private List<Item> objetParSol;
+    private List<Personnage> personnages;
     private Map<Direction, Porte> portes;
 
     public Salle(String nom){
         this.nom = nom;
-        this.objetParSol = new ArrayList<Consommables>();
+        this.objetParSol = new ArrayList<Item>();
+        this.personnages = new ArrayList<Personnage>();
         this.portes = new HashMap<Direction,Porte>();
     }
     
@@ -187,16 +219,24 @@ class Salle{
         return this.portes.get(dir);
     }
 
-    public List<Consommables> getObjetsParSol() {
+    public List<Item> getObjetsParSol() {
         return this.objetParSol;
     }
 
-    public void prendreObjet(Consommables ob){
+    public void prendreObjet(Item ob){
         objetParSol.remove(ob);
     }
 
-    public void deposerObjet(Consommables ob){
+    public void deposerObjet(Item ob){
         objetParSol.add(ob);
+    }
+
+    public void ajouterPersonnage(Personnage perso) {
+        this.personnages.add(perso);
+    }
+
+    public void supprimerPersonnage(Personnage perso){
+        this.personnages.remove(perso);
     }
     
 }
@@ -232,7 +272,41 @@ class Maison {
 
 }
 
+/*class Position {
+    private int x;
+    private int y;
+    private int z; //Etage
 
-class Consommables{ // Labib 
+    public Position(int x, int y, int z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
-}
+    public int getX(){
+        return this.x;
+    }
+
+    public int getY(){
+        return this.y;
+    }
+
+    public int getZ(){
+        return this.z;
+    }
+
+    public boolean equals(Object other){
+        if (other instanceof Position){
+            Position o = (Position) other;
+            return this.x == o.getX() && 
+                   this.y == o.getY() &&
+                    this.z == o.getZ();
+        }
+        return false;
+    }
+
+    public int hashCode(){  //A rediscuter hh
+        return x+y+z;
+    }
+
+}*/

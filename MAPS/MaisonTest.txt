@@ -1,4 +1,6 @@
-PORTE:F:CLE_1
-CLE:CLE_1
-ARME:EPEE:15
-MONSTRE:GOBLIN:50
+PORTE:F:SerrureId
+CLE:Nom:Id:Size:SerrureId
+ARME:Nom:Id:Size:Degats
+FOOD:Nom:Id:Size:Bonus
+MONSTRE:Pv:NomArme:DegatsArme
+ALLIE:Pv:TRAHISON:NomArme:DegatsArme
