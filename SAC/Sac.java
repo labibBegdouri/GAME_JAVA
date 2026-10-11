@@ -53,10 +53,10 @@ public class Sac {
 
     }
 
-    public boolean remove(int indice){
+    public boolean remove(Item item){
         // return false;
         try{
-            this.items.remove(indice);
+            this.items.remove(item);
         }
         catch (Exception e){
             return false;
