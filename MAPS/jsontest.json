@@ -1,0 +1,55 @@
+{ 
+    // Maison
+  "salles": [
+    {
+        "nom": "",
+        "objetParsol":[],
+        "portes":[
+            {
+                "fermee":false,
+                "cleId":"",
+                "salleA":{
+                            "nom": "",
+                            "objetParsol":[],
+                            "portes":[
+                                    {
+                                        "fermee":false,
+                                        "cleId":"",
+                                        "salleA":{
+
+                                        },
+                                        "salleB":{
+
+                                        }
+                                    
+                                    }
+                                ]
+
+                },
+                "salleB":{
+                            "nom": "",
+                            "objetParsol":[],
+                            "portes":[
+                                    {
+                                        "fermee":false,
+                                        "cleId":"",
+                                        "salleA":{
+
+                                        },
+                                        "salleB":{
+
+                                        }
+                                    
+                                    }
+                                ]
+                        
+                            }
+                                
+                                }
+        ]
+    }
+  ],
+  "salleReveil":"",
+  "salleTresor":""
+
+}

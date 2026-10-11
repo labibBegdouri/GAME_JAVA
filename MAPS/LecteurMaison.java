@@ -84,7 +84,7 @@ public class LecteurMaison{
             case "FOOD":
                 // Syntaxe attendue -> FOOD:Nom:Id:Size:Bonus (ex: FOOD:POMME:1:1:15)
                 if (contenuSplit.length >= 5) {
-                    Food f = new Food(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), 1, Integer.parseInt(contenuSplit[4]));
+                    Food f = new Food(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), Integer.parseInt(contenuSplit[4]));
                     salle.deposerObjet(f);
                 }
                 break;
