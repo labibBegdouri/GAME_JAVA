@@ -12,7 +12,7 @@ public class Tresor {
 
         }
 
-        Item take(Item item){
+        public Item take(Item item){
             items.remove(item);
             return item;
         }
