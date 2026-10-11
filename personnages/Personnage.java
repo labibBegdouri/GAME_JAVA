@@ -10,7 +10,7 @@ public abstract class Personnage {
     }
 
     public void setPv(int pv) {
-        // tu peux pas depasser le pv initialement fixe
+        // tu ne peux pas depasser le pv initialement fixe
         if (pv < pvInit) {
             this.pv = pv;
         } else {
@@ -52,28 +52,44 @@ class Heros extends Personnage{
         this.sac = new Sac(capacite);
     }
 
+    public Sac getSac() {
+        return this.sac;
+    }
+
     public void consommer(Food f) {
         // Si tu consommes qlq chose avec la barre de vie rempli, tu vas perdre ton consommable
         int newPv = this.getPv() + f.getBonus();
         this.setPv(newPv);
+        this.sac.remove(f);
     }
 }
 
-class Monstre extends Personnage{
-    private Arme a;
-    public Monstre(int pvInit, Arme a) {
+class Creature extends Personnage{
+    private Arme arme;
+
+    public Creature(int pvInit, Arme a) {
         super(pvInit);
-        this.a = a;
+        this.arme = a;
+    }
+
+    public void attaquer(Personnage victime) {
+        if (!victime.getEstMort()){
+            Arme a = this.arme;
+            if (victime.getPv() <= a.getDegat()){
+                victime.setPv(0);
+                victime.setEstMort(true);
+            } else {
+                victime.setPv(victime.getPv() - a.getDegat());
+            }
+        }
     }
 }
 
-class Allie extends Personnage {
+class Allie extends Creature {
     private boolean trahison;
-    private Arme a;
 
     public Allie(int pvInit, boolean trahison, Arme a){
-        super(pvInit);
+        super(pvInit, a);
         this.trahison = trahison;
-        this.a = a;
     }
 }
