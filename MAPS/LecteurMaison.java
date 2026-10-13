@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import java.util.List;
 
 
@@ -17,8 +18,8 @@ public class LecteurMaison{
     public Maison chargerDepuisFichier(String chemin){ // charger la map depuis le chemin
         
         Maison maison = new Maison();
-        // extraire la data utile
-        ArrayList<String> dataUtile = new ArrayList<String>();
+    
+        List<String[]> memoirePortes = new ArrayList<String[]>(); //memoriser toutes les portes.
 
         try (BufferedReader br = new BufferedReader(new FileReader(chemin))){
             String ligne;
@@ -27,41 +28,62 @@ public class LecteurMaison{
                 if (ligne.isEmpty() || ligne.startsWith("#")){
                     continue;
                 }
-
-                String[] ligneSansEspaces = ligne.split("\\s+");
-                for (String mot : ligneSansEspaces){
-                    dataUtile.add(mot.toUpperCase());
+                String salleName = "";
+                String[] ligneSplit = ligne.split(":");
+                String objetType = ligneSplit[0];
+                Salle salleCourante = null;
+                if (objetType.equals("Salle")){
+                    salleName = ligneSplit[1];
+                    salleCourante = new Salle(salleName);
+                    maison.ajouterSalle(salleCourante);
+                }else if (objetType.equals("PORTE")) {
+                    memoirePortes.add(new String[]{salleName,ligne});
+                }else{
+                    traiterContenuCase(ligne, salleCourante, maison);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (dataUtile.size() < 2 ){
-            return maison;
+        //Connecter les portes.
+
+        for (String[] infoPorte : memoirePortes){
+            String salleName = infoPorte[0];
+            String lignePorte = infoPorte[1];
+            String[] lignePorteSplit = lignePorte.split(":");
+
+            String etat = lignePorteSplit[1];
+            String serrureId = lignePorteSplit[2];  //L'ID ou "aucune"
+            Direction dir = Direction.valueOf(lignePorteSplit[3]);
+            String nomSalleB = lignePorteSplit[4];
+
+            Salle salleA = maison.getSalle(salleName);
+            Salle salleB = maison.getSalle(nomSalleB);
+
+            if (salleA != null && salleB != null && salleA.getPorte(dir) == null) {
+                    
+                    Porte porte = new Porte(etat, serrureId);
+                    
+                    porte.setSalleA(salleA);
+                    porte.setSalleB(salleB);
+                    
+                    salleA.addPorte(dir, porte);
+                    salleB.addPorte(directionOpposee(dir), porte);
+                }
         }
-
-        int nbLignes = Integer.parseInt(dataUtile.get(0));
-        int nb_colones = Integer.parseInt(dataUtile.get(1));
-        dataUtile.subList(0, 3).clear();
-        //map d un seule etage sous forme d une matrice
-        String[][] map = new String[nbLignes][nb_colones];
-
-        for (int y = 0; y < nbLignes; y++){
-            for (int x = 0; x < nb_colones; x++){
-                map[y][x] = dataUtile.get(y*nbLignes + x);
-            }
-        }
-
-        // analyse de la map pour relier les classes
-
-        analyser(map,nbLignes,nb_colones,maison);
         
         return maison;
     }
 
-    private void analyser(String[][] map, int nbLignes, int nbColonnes, Maison maison) {
-        
+    private Direction directionOpposee(Direction dir) {
+        switch (dir) {
+            case HAUT: return Direction.BAS;
+            case BAS: return Direction.HAUT;
+            case GAUCHE: return Direction.DROITE;
+            case DROITE: return Direction.GAUCHE;
+            default: return null;
+        }
     }
 
     private void traiterContenuCase(String contenu, Salle salle, Maison maison){
@@ -95,7 +117,7 @@ public class LecteurMaison{
                         int degatArme = Integer.parseInt(contenuSplit[3]);
                     
                         Arme armeMonstre = new Arme(nomArme, 0, 1, degatArme);
-                        Monstre m = new Monstre(pvInit, armeMonstre);
+                        Creature m = new Creature (pvInit, armeMonstre);
                         salle.ajouterPersonnage(m);
                     }
                     break;
@@ -122,34 +144,23 @@ public class LecteurMaison{
         }
     }
 
-    private Porte creerPorte(String contenu) {
-        String[] parts = contenu.split(":");
-        if (parts.length >= 3 && parts[1].equals("F")) {
-            return new Porte(parts[2]);
-        }
-        return new Porte();
-    }
 }
 
 
 class Porte{
 
-    private boolean fermee;  //  Porte O ou F
+    private String fermee;  //  Porte O ou F
     private String cleId; //Si F
     private Salle salleA;
     private Salle salleB;
 
-    public Porte(String cleId){ // pour F
+    public Porte(String fermee, String cleId){ // pour F
 
-        this.fermee = true;
+        this.fermee = fermee;
         this.cleId = cleId;
 
     }
 
-    public Porte(){ //pour O
-        this.fermee = false;
-        this.cleId = null;
-    }
 
     public void setSalleA(Salle salle){
 
@@ -174,13 +185,13 @@ class Porte{
     
 
     public boolean estFermee(){ //verifier si P est F
-        return this.fermee;
+        return this.fermee.equals("F");
     }
 
     public boolean ouvrirPorte(String cleId){ //verifier si cleId est la cle de P
 
         if (this.cleId != null && this.cleId.equals(cleId)){
-            this.fermee = false;
+            this.fermee = "O";
             return true;
         }
         return false;
@@ -267,6 +278,10 @@ class Maison {
 
     public Salle getSalleTresor(){
         return this.salles.get(salleTresor);
+    }
+
+    public Salle getSalle(String nom){
+        return this.salles.get(nom);
     }
 
 

@@ -1,4 +1,4 @@
-PORTE:F:SerrureId
+PORTE:Etat:SerrureId:Direction:salleB
 CLE:Nom:Id:Size:SerrureId
 ARME:Nom:Id:Size:Degats
 FOOD:Nom:Id:Size:Bonus

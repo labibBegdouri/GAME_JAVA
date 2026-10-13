@@ -19,8 +19,8 @@ public class Food extends Item  {
         return this.bonus;
     }
 
-    public int setBonus(){
-        return this.bonus;
+    public void setBonus(int bonus){
+        this.bonus = bonus;
     }
 
 
