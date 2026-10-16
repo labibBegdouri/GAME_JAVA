@@ -1,0 +1,6 @@
+PORTE:Etat:SerrureId:Direction:salleB
+CLE:Nom:Id:Size:SerrureId
+ARME:Nom:Id:Size:Degats
+FOOD:Nom:Id:Size:Bonus
+MONSTRE:Pv:NomArme:DegatsArme
+ALLIE:Pv:TRAHISON:NomArme:DegatsArme
