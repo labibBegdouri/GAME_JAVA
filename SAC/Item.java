@@ -1,6 +1,6 @@
 package SAC;
 
-import javax.swing.text.Position;
+import MAPS.*;
 
 public class  Item{
     private String nom;
