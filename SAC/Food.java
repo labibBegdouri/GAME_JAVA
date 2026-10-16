@@ -23,6 +23,11 @@ public class Food extends Item  {
         this.bonus = bonus;
     }
 
+    @Override
+    public String getString(){
+        return "{ name = "+ getNom()+", Type = Food" + ", Bonus = "+getBonus()+" }" ;
+        
+    }
 
     
 }

@@ -16,4 +16,10 @@ public class Cle extends Item {
     public String getCleId() {
         return this.cleId;
     }
+
+    @Override
+    public String getString(){
+        return "{ name = "+ getNom()+", Type = Clé" + " }" ;
+        
+    }
 }
