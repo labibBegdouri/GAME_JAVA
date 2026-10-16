@@ -1,6 +1,11 @@
-PORTE:Etat:SerrureId:Direction:salleB
-CLE:Nom:Id:Size:SerrureId
-ARME:Nom:Id:Size:Degats
-FOOD:Nom:Id:Size:Bonus
-MONSTRE:Pv:NomArme:DegatsArme
-ALLIE:Pv:TRAHISON:NomArme:DegatsArme
+Salle:Hall:hauteur:largeur:x0;y0
+PORTE:Etat:SerrureId:Direction:salleB:x:y
+CLE:Nom:Id:Size:SerrureId:x:y
+ARME:Nom:Id:Size:Degats:x:y
+FOOD:Nom:Id:Size:Bonus:x:y
+MONSTRE:Pv:NomArme:DegatsArme:x:y
+ALLIE:Pv:TRAHISON:NomArme:DegatsArme:x:y
+REVEIL:x:y
+TRESOR:x:y
+
+Salle:coul

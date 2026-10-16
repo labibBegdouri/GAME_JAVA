@@ -1,10 +1,22 @@
 package SAC;
 
+import MAPS.*;
 
 public class  Item{
     private String nom;
     private int id; // or string ????
     private int size;
+    private Position pos;
+
+
+    public Position getPosition(){
+        return this.pos;
+    }
+
+
+    public void setPosition(int x,int y){
+        this.pos= new Position(x,y);
+    }
 
     public  Item(String nom,int id,int size){
         this.nom=nom;
@@ -50,6 +62,15 @@ public class  Item{
     public void setSize(int size ){
         this.size=size;
     }
+
+
+
+    public String getString(){
+        return "";
+        
+    }
+
+
 
 
 }
