@@ -7,7 +7,7 @@ public class Sac {
 
     private int fullness=0;
 
-    ArrayList<Item> items = new ArrayList<Item>();
+    private ArrayList<Item> items = new ArrayList<Item>();
 
 
 
@@ -40,7 +40,9 @@ public class Sac {
     }
 
 
-
+    public ArrayList<Item> getSAC(){
+        return this.items;
+    }
 
     public boolean  collect(Item item){
         if ((getFullness()+item.getSize())>getCapacity()){
@@ -55,14 +57,18 @@ public class Sac {
 
     public boolean remove(Item item){
         // return false;
-        try{
-            this.items.remove(item);
-        }
-        catch (Exception e){
-            return false;
-        }
-        return true;
+        if (this.items.remove(item)){
+            this.addFullness(-item.getSize());
+            return true;
+        };
+        return false;
 
+    }
+
+
+    public String getString(){
+        return items.toString();
+            
     }
 
 
