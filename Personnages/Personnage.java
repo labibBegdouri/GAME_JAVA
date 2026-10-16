@@ -3,11 +3,26 @@ package Personnages;
 import SAC.*;
 import MAPS.*;
 public abstract class Personnage {
-    static int pvInit;
+    private String nom;
+    private static int pvInit = 0;
     private int pv;
     private boolean estMort;
     private Position pos;
 
+    public static void initialiserPvInit(int pvI){
+        pvInit = pvI;
+    }
+
+    public int getPvInit(){
+        return Personnage.pvInit;
+    }
+    public void setNom(String nom){
+        this.nom = nom;
+    }
+
+    public String getNom(){
+        return this.nom;
+    }
     public Position getPosition(){
         return this.pos;
     }
@@ -35,8 +50,8 @@ public abstract class Personnage {
         this.estMort = etat;
     }
 
-    public Personnage(int pvInit) {
-        this.pvInit = pvInit;
+    public Personnage(String nom) {
+        this.nom = nom;
         this.pv = pvInit;
         this.estMort = false;
     }

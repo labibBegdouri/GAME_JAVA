@@ -5,8 +5,8 @@ import SAC.*;
 public class Heros extends Personnage{
     private Sac sac;
     
-    public Heros(int pvInit, int capacite) {
-        super(pvInit);
+    public Heros(int capacite) {
+        super("HERO");
         this.sac = new Sac(capacite);
     }
 

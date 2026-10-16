@@ -135,7 +135,7 @@ public class LecteurMaison{
                         int degatArme = Integer.parseInt(contenuSplit[3]);
 
                         Arme armeMonstre = new Arme(nomArme, 0, 1, degatArme);
-                        Creature m = new Creature (pvInit, armeMonstre);
+                        Creature m = new Creature (armeMonstre);
                         m.setPosition(x, y);
                         salle.ajouterPersonnage(m);
                     }
@@ -148,7 +148,7 @@ public class LecteurMaison{
                     
                     Arme armeAllie = new Arme(nomArme, 0, 1, degatArme);
                     boolean trahison = Boolean.parseBoolean(contenuSplit[2]);
-                    Allie allie = new Allie(pvInit, trahison, armeAllie);
+                    Allie allie = new Allie(trahison, armeAllie);
                     allie.setPosition(x, y);
                     salle.ajouterPersonnage(allie);
                 }

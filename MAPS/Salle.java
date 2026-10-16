@@ -79,6 +79,12 @@ public class Salle{
         this.personnages.remove(perso);
     }
 
+    public Map<Direction,Porte> getPortes(){
+        return this.portes;
+    }
     
+    public List<Personnage> getPersonnages(){
+        return this.personnages;
+    }
 }
 

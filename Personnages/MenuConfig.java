@@ -1,8 +1,10 @@
+package Personnages;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import SAC.*;
+import MAPS.*;
 
 public class MenuConfig {
     private int demanderEntier(Scanner scanner, String message){
@@ -28,7 +30,7 @@ public class MenuConfig {
 
     public void statutHeros(Heros heros, Salle salleCourante) {
         System.out.println("Position : " + salleCourante.getSalleNom());
-        System.out.println("PV : " + heros.getPv() + " / " + heros.pvInit + "| Sac : " + heros.getSac().getFullness() + " / " + heros.getSac().getCapacity());
+        System.out.println("PV : " + heros.getPv() + " / " + heros.getPvInit() + "| Sac : " + heros.getSac().getFullness() + " / " + heros.getSac().getCapacity());
 
         String directions = "";
         for (Direction dir : salleCourante.getPortes().keySet()){
@@ -60,9 +62,9 @@ public class MenuConfig {
         System.out.println("----Configuration du jeu----");
 
         int pvInit = demanderEntier(scanner, "Entrez les points de vie des personnages :");
+        Personnage.initialiserPvInit(pvInit);
         int cap = demanderEntier(scanner, "Entrez la capacite du sac :");
-
-        Heros heros = new Heros(pvInit, cap);
+        Heros heros = new Heros(cap);
 
         System.out.println("Configuration terminee. L'aventure commence !");
         scanner.close();
@@ -98,7 +100,7 @@ public class MenuConfig {
             return salleCourante;
         }
         if (porte.estFermee()){
-            for (Item obj : heros.getSac().items){
+            for (Item obj : heros.getSac().getSAC()){
                 if (obj instanceof Cle) {
                     Cle cle = (Cle) obj;
                     if (porte.ouvrirPorte(cle.getCleId())){

@@ -1,7 +1,7 @@
 package MAPS;
 
 
-class Porte{
+public class Porte{
 
     private String fermee;  //  Porte O ou F
     private String cleId; //Si F
@@ -58,10 +58,4 @@ class Porte{
         return false;
     }
 
-}
-enum Direction{ //Cas seule etage
-    HAUT,
-    BAS,
-    DROITE,
-    GAUCHE
 }

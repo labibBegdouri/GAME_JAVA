@@ -4,8 +4,8 @@ import SAC.*;
 public class Creature extends Personnage{
     private Arme arme;
 
-    public Creature(int pvInit, Arme a) {
-        super(pvInit);
+    public Creature(Arme a) {
+        super("MONSTRE");
         this.arme = a;
     }
 
