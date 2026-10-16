@@ -6,12 +6,38 @@ import java.util.Map;
 import java.util.List;
 import SAC.*;
 import Personnages.*;
+
 public class Salle{
     private String nom;
     private List<Item> objetParSol;
     private List<Personnage> personnages;
     private Map<Direction, Porte> portes;
+    private Position posInit;
+    private int hauteur;
+    private int largeur;
     
+    public  int getH(){
+        return hauteur;
+    }
+
+    public  void setH(int h){
+        this.hauteur = h;
+    }
+
+    public  int getL(){
+        return largeur;
+    }
+
+    public  void setL(int l){
+        this.largeur = l;
+    }
+
+    public void setPosInit(int x, int y){
+        this.posInit = new Position(x, y);
+    }
+    public Position getPosInit(){
+        return this.posInit;
+    }
 
     public Salle(String nom){
         this.nom = nom;
@@ -52,6 +78,7 @@ public class Salle{
     public void supprimerPersonnage(Personnage perso){
         this.personnages.remove(perso);
     }
+
     
 }
 

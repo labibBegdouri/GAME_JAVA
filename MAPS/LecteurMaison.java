@@ -1,8 +1,7 @@
 package MAPS;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import java.util.List;
 
@@ -36,6 +35,13 @@ public class LecteurMaison{
                 if (objetType.equals("Salle")){
                     salleName = ligneSplit[1];
                     salleCourante = new Salle(salleName);
+                    int x = Integer.parseInt(ligneSplit[-2]);
+                    int y = Integer.parseInt(ligneSplit[-1]);
+                    int h = Integer.parseInt(ligneSplit[-4]);
+                    int l = Integer.parseInt(ligneSplit[-2]);
+                    salleCourante.setPosInit(x, y);
+                    salleCourante.setH(h);
+                    salleCourante.setL(l);
                     maison.ajouterSalle(salleCourante);
                 }else if (objetType.equals("PORTE")) {
                     memoirePortes.add(new String[]{salleName,ligne});
@@ -150,6 +156,7 @@ public class LecteurMaison{
             case "CLE":
                 if (contenuSplit.length >= 5) {
                     Cle c = new Cle(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), contenuSplit[4]);
+                    c.setPosition(x, y);
                     salle.deposerObjet(c);
                 }
                 break;

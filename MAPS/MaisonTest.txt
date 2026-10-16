@@ -1,4 +1,4 @@
-Salle:Hall
+Salle:Hall:hauteur:largeur:x0;y0
 PORTE:Etat:SerrureId:Direction:salleB:x:y
 CLE:Nom:Id:Size:SerrureId:x:y
 ARME:Nom:Id:Size:Degats:x:y
