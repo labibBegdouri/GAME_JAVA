@@ -29,15 +29,8 @@ public class MenuConfig {
     }
 
     public void statutHeros(Heros heros, Salle salleCourante) {
-        System.out.println("Position : " + salleCourante.getSalleNom());
+        System.out.println("Position actuelle : " + salleCourante.getSalleNom() + " | (" + heros.getPosition().getX() + ", " + heros.getPosition().getY() + ")");
         System.out.println("PV : " + heros.getPv() + " / " + heros.getPvInit() + "| Sac : " + heros.getSac().getFullness() + " / " + heros.getSac().getCapacity());
-
-        String directions = "";
-        for (Direction dir : salleCourante.getPortes().keySet()){
-            directions += " " + dir;
-        }
-
-        System.out.print("Sorties possibles :" + directions);
     }
 
     public void descripSalle(Salle s){
@@ -46,14 +39,51 @@ public class MenuConfig {
         List<Personnage> personnages = s.getPersonnages();
 
         for (Item obj : objects) {
-            System.out.println("- " + obj.getNom() + " ,sa taille = " + obj.getSize() + ", son id = " + obj.getId() + ", son pos = " + obj.getPosition() );
+            System.out.println("- " + obj.getNom() + " ,sa taille = " + obj.getSize() + ", sa pos = (" + obj.getPosition().getX() + ", " + obj.getPosition().getY() + ")" );
         }
 
         System.out.println("Personnages dans la salle :");
         for (Personnage pers : personnages) {
-            System.out.println("- " + pers.getNom());
+            System.out.println("- " + pers.getNom() + "se trouve a (" + pers.getPosition().getX() + ", " + pers.getPosition().getY() + ")");
         }
+    }
 
+    public String radar(Salle salleCourante, Position p) {
+        int x = p.getX();
+        int y = p.getY();
+
+        int x0 = salleCourante.getPosInit().getX();
+        int y0 = salleCourante.getPosInit().getY();
+        int l = salleCourante.getL();
+        int h = salleCourante.getH();
+
+        if (x0 < x && x < x0 + l && y0 < y && y < y0 + h) /* la position est au sein de la salle */ {
+            String contenu = "";
+            for (Item obj : salleCourante.getObjetsParSol()) {
+                if (p.equals(obj.getPosition())) {
+                    contenu += obj.getNom() + " ";
+                }
+            }
+            for (Personnage pers : salleCourante.getPersonnages()) {
+                if (p.equals(pers.getPosition())) {
+                    contenu += pers.getNom() + " ";
+                }
+            }
+            if (contenu.isEmpty()){
+                return "LIBRE";
+            }
+            return contenu;
+        } else {
+            for (Porte porte : salleCourante.getPortes().values()) {
+                if (p.equals(porte.getPosition())) {
+                    if (porte.estFermee()) {
+                        return "Porte verrouille";
+                    }
+                    return "Porte ouverte";
+                }
+            }
+            return "MUR";
+        }
     }
 
     public Heros demarageJeu() {
@@ -72,6 +102,16 @@ public class MenuConfig {
         return heros;
     }
 
+    public void afficherSac(Sac sac) {
+        if (sac.getFullness() != 0) {
+            System.out.println("Votre sac contient :");
+            for (Item obj : sac.getSAC()) {
+                System.out.println("- " + obj.getNom() + " ,sa taille = " + obj.getSize() + ", son ID = " + obj.getId());
+            }
+        } else {
+            System.out.println("Votre sac est vide !!");
+        }
+    } 
 
     public Salle deplacement(Scanner scanner, Salle salleCourante, Heros heros) {
         /*On capture la direction du heros */
@@ -92,50 +132,102 @@ public class MenuConfig {
             }
         }
 
-        /*On recupere la porte et on essaie de l'ouvrir */
-        Porte porte = salleCourante.getPorte(dir);
+        int xCible = heros.getPosition().getX();
+        int yCible = heros.getPosition().getY();
 
-        if (porte == null) {
-            System.out.println("Vous voulez entrer dans un mur ?");
+        switch (dir) {
+            case HAUT:
+                yCible++;
+                break;
+            case BAS :
+                yCible--;
+                break;
+            case GAUCHE :
+                xCible--;
+                break;
+            case DROITE :
+                xCible++;
+                break;
+        }
+
+        int x0 = salleCourante.getPosInit().getX();
+        int y0 = salleCourante.getPosInit().getY();
+        int l = salleCourante.getL();
+        int h = salleCourante.getH();
+
+        if (x0 < xCible && xCible < x0 + l && y0 < yCible && yCible < y0 + h) {
+            heros.setPosition(xCible, yCible);
+            return salleCourante;
+        } else {
+            for (Porte porte : salleCourante.getPortes().values()) {
+                Position p = new Position(xCible, yCible);
+
+                if (p.equals(porte.getPosition())) {
+                    if (porte.estFermee()) {
+                        for (Item obj : heros.getSac().getSAC()) {
+                            if (obj instanceof Cle) {
+                                Cle cle = (Cle) obj;
+                                if (porte.ouvrirPorte(cle.getCleId())) {
+                                    switch (dir){
+                                        case HAUT :
+                                            heros.setPosition(xCible, yCible++);
+                                            break;
+                                        case BAS :
+                                            heros.setPosition(xCible, yCible--);
+                                            break;
+                                        case GAUCHE :
+                                            heros.setPosition(xCible--, yCible);
+                                            break;
+                                        case DROITE :
+                                            heros.setPosition(xCible++, yCible);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        switch (dir){
+                            case HAUT :
+                                heros.setPosition(xCible, yCible++);
+                                break;
+                            case BAS :
+                                heros.setPosition(xCible, yCible--);
+                                break;
+                            case GAUCHE :
+                                heros.setPosition(xCible--, yCible);
+                                break;
+                            case DROITE :
+                                heros.setPosition(xCible++, yCible);
+                                break;
+                        }
+                    }
+
+                    return porte.getAutreSalle(salleCourante);
+                }
+            }
+            System.out.println("Tu veux entrer a travers le mur ??");
             return salleCourante;
         }
-        if (porte.estFermee()){
-            for (Item obj : heros.getSac().getSAC()){
-                if (obj instanceof Cle) {
-                    Cle cle = (Cle) obj;
-                    if (porte.ouvrirPorte(cle.getCleId())){
-                        return porte.getAutreSalle(salleCourante);
-                    }
-                }
-            }
-            if (porte.estFermee()) {
-                System.out.println("La porte est ferme, tu n'as pas la cle !!");
-                return salleCourante;
-            }
-        }
-        return porte.getAutreSalle(salleCourante);
     }
 
-    public void ramasser(Scanner scanner, Salle salleCourante, Heros heros) {
+    public void ramasser(Salle salleCourante, Heros heros) {
         List<Item> objSalle= salleCourante.getObjetsParSol();
+        Item objCible = null;
 
-        while (true) {
-            int id = demanderEntier(scanner, "Choisis l'ID de l'objet souhaite (-1 pour finir)");
-            if (id == -1) {
-                return ;
-            } else { 
-                if (id >= 0 && id < objSalle.size()) {
-                    Item obj = objSalle.get(id);
-                    if (heros.getSac().collect(obj)) {
-                        salleCourante.prendreObjet(obj);
-                        System.out.println("Objet ajoute !!");
-                    } else {
-                        System.out.println("Sac rempli !!");
-                    }
-                } else {
-                    System.out.println("ID inexistant !!");
-                }
+        for (Item obj : objSalle) {
+            if (heros.getPosition().equals(obj.getPosition())) {
+                objCible = obj;
+                break;
             }
+        }
+
+        if (objCible != null) {
+            if (heros.getSac().collect(objCible)) {
+                    salleCourante.prendreObjet(objCible);
+                    System.out.println("Objet ajoute au Sac");
+                } else {
+                    System.out.println("Sac rempli");
+                }
         }
     }
 
@@ -147,7 +239,14 @@ public class MenuConfig {
             if (id == -1) {
                 return ;
             } else { 
-                
+                Item obj = sac.getSAC().get(id);
+                if (obj instanceof Food) {
+                    Food f = (Food) obj;
+                    heros.consommer(f);
+                    break;
+                } else {
+                    System.out.println("Choisis bien qlq chose de mangeable");
+                }
             }
         }
     }
@@ -158,14 +257,76 @@ public class MenuConfig {
         Maison maison = lecteur.chargerDepuisFichier("/MAPS/MaisonText.txt"); 
         
         Salle salleCourante = maison.getSalleReveil();
+        Scanner scanner = new Scanner(System.in);
 
         while (!heros.getEstMort()) {
             statutHeros(heros, salleCourante);
             descripSalle(salleCourante);
 
+            System.out.println("RADAR : (Pour se deplacer)");
+            System.out.println("HAUT : " + radar(salleCourante, new Position(heros.getPosition().getX(), heros.getPosition().getY() + 1)));
+            System.out.println("BAS : " + radar(salleCourante, new Position(heros.getPosition().getX(), heros.getPosition().getY() - 1)));
+            System.out.println("DROITE : " + radar(salleCourante, new Position(heros.getPosition().getX() + 1, heros.getPosition().getY())));
+            System.out.println("GAUCHE : " + radar(salleCourante, new Position(heros.getPosition().getX() - 1, heros.getPosition().getY())));
+
+            int maxChoix = 3;
+            System.out.println("Actions possibles :");
+            System.out.println("1/ Afficher Sac");
+            System.out.println("2/ Se deplacer");
+            System.out.println("3/ Manger");
             
+            for (Item obj : salleCourante.getObjetsParSol()) {
+                if (heros.getPosition().equals(obj.getPosition())) {
+                    System.out.println("4/ Ramasser objet");
+                    maxChoix = 4;
+                    break;
+                }
+            }
 
+            int choix = 0;
+            boolean saisieValide = false;
 
+            while (!saisieValide) {
+                System.out.println("C'est quoi ta prochaine action ?");
+                if (scanner.hasNextInt()) {
+                    choix = scanner.nextInt();
+                    if (1 <= choix && choix <= maxChoix) {
+                        saisieValide = true;
+                    } else {
+                        System.out.println("Veuillez choisir une action valide.");
+                    }
+                } else {
+                    System.out.println("Erreur : vous devez saisir un nombre valide.");
+                    scanner.next();
+                }
+            }
+
+            switch (choix) {
+                case 1 : 
+                    afficherSac(heros.getSac());
+                    break;
+                case 2 :
+                    salleCourante = deplacement(scanner, salleCourante, heros);
+                    break;
+                case 3 :
+                    manger(scanner, heros);
+                    break;
+                case 4 :
+                    ramasser(salleCourante, heros);
+                    break;
+                default :
+                    System.out.println("Pas d'action valide");
+                    break;
+            }
+
+            /*On ne fait cette verification que si le heros a arrive a la salle de sortie */
+            for (Item obj : heros.getSac().getSAC()){
+                if (obj instanceof Tresor) {
+                    Tresor tresor = (Tresor) obj;
+                    tresor.toString();
+                }
+            }
         }
+        scanner.close();
     }
 }
