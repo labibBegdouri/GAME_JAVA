@@ -266,7 +266,7 @@ public class MenuConfig {
     public void bouclePrinc(){
         Heros heros = demarageJeu();
         LecteurMaison lecteur = new LecteurMaison();
-        Maison maison = lecteur.chargerDepuisFichier("/home/reda/Bureau/java_game/GAME_JAVA/MAPS/MaisonTest.txt"); 
+        Maison maison = lecteur.chargerDepuisFichier("./MAPS/MaisonTest.txt"); 
         heros.setPosition(maison.getPosReveil().getX(), maison.getPosReveil().getY());
 
         Salle salleCourante = maison.getSalleReveil();
