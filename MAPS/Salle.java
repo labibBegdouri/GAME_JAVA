@@ -9,8 +9,8 @@ import Personnages.*;
 
 public class Salle{
     private String nom;
-    private List<Item> objetParSol;
-    private List<Personnage> personnages;
+    private ArrayList<Item> objetParSol;
+    private ArrayList<Personnage> personnages;
     private Map<Direction, Porte> portes;
     private Position posInit;
     private int hauteur;
@@ -59,7 +59,8 @@ public class Salle{
         return this.portes.get(dir);
     }
 
-    public List<Item> getObjetsParSol() {
+
+    public ArrayList<Item> getObjetsParSol() {
         return this.objetParSol;
     }
 
@@ -83,7 +84,7 @@ public class Salle{
         return this.portes;
     }
     
-    public List<Personnage> getPersonnages(){
+    public ArrayList<Personnage> getPersonnages(){
         return this.personnages;
     }
 }
