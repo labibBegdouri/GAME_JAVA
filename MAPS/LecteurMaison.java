@@ -35,10 +35,10 @@ public class LecteurMaison{
                 if (objetType.equals("Salle")){
                     salleName = ligneSplit[1];
                     salleCourante = new Salle(salleName);
-                    int x = Integer.parseInt(ligneSplit[-2]);
-                    int y = Integer.parseInt(ligneSplit[-1]);
-                    int h = Integer.parseInt(ligneSplit[-4]);
-                    int l = Integer.parseInt(ligneSplit[-2]);
+                    int x = Integer.parseInt(ligneSplit[ligneSplit.length-2]);
+                    int y = Integer.parseInt(ligneSplit[ligneSplit.length-1]);
+                    int h = Integer.parseInt(ligneSplit[ligneSplit.length-4]);
+                    int l = Integer.parseInt(ligneSplit[ligneSplit.length-2]);
                     salleCourante.setPosInit(x, y);
                     salleCourante.setH(h);
                     salleCourante.setL(l);
@@ -77,8 +77,8 @@ public class LecteurMaison{
                 
                 salleA.addPorte(dir, porte);
                 salleB.addPorte(directionOpposee(dir), porte);
-                int x = Integer.parseInt(lignePorteSplit[-2]);
-                int y = Integer.parseInt(lignePorteSplit[-1]);
+                int x = Integer.parseInt(lignePorteSplit[lignePorteSplit.length-2]);
+                int y = Integer.parseInt(lignePorteSplit[lignePorteSplit.length-1]);
                 porte.setPosition(x,y);
             }
 
@@ -100,8 +100,8 @@ public class LecteurMaison{
     private void traiterContenuCase(String contenu, Salle salle, Maison maison){
         String[] contenuSplit = contenu.split(":");
         String type = contenuSplit[0];
-        int x = Integer.parseInt(contenuSplit[-2]);
-        int y = Integer.parseInt(contenuSplit[-1]);
+        int x = Integer.parseInt(contenuSplit[contenuSplit.length-2]);
+        int y = Integer.parseInt(contenuSplit[contenuSplit.length-1]);
 
         switch (type) {
             case "REVEIL":

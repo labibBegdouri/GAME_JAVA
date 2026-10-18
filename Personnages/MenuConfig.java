@@ -266,7 +266,7 @@ public class MenuConfig {
     public void bouclePrinc(){
         Heros heros = demarageJeu();
         LecteurMaison lecteur = new LecteurMaison();
-        Maison maison = lecteur.chargerDepuisFichier("/MAPS/MaisonText.txt"); 
+        Maison maison = lecteur.chargerDepuisFichier("./MAPS/MaisonText.txt"); 
         
         Salle salleCourante = maison.getSalleReveil();
         Scanner scanner = new Scanner(System.in);
