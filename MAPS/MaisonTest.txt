@@ -1,11 +1,16 @@
-Salle:Hall:hauteur:largeur:x0;y0
-PORTE:Etat:SerrureId:Direction:salleB:x:y
-CLE:Nom:Id:Size:SerrureId:x:y
-ARME:Nom:Id:Size:Degats:x:y
-FOOD:Nom:Id:Size:Bonus:x:y
-MONSTRE:Pv:NomArme:DegatsArme:x:y
-ALLIE:Pv:TRAHISON:NomArme:DegatsArme:x:y
-REVEIL:x:y
-TRESOR:x:y
+Salle:Hall:6:8:0:0
+PORTE:OUVERTE:0:DROITE:Couloir:7:2
+CLE:CleDoree:1:1:1:2:3
+ARME:Epee:2:2:15:5:1
 
-Salle:coul
+Salle:Couloir:6:10:8:0
+PORTE:OUVERTE:0:GAUCHE:Hall:8:2
+PORTE:VERROUILLEE:1:HAUT:SalleTresor:12:5
+FOOD:Pomme:3:1:10:10:1
+MONSTRE:40:Massue:8:15:3
+ALLIE:30:NON:Dague:5:9:4
+REVEIL:14:1
+
+Salle:SalleTresor:5:6:10:6
+MONSTRE:60:Hache:12:13:8
+TRESOR:14:10
