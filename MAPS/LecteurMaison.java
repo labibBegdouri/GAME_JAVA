@@ -38,7 +38,7 @@ public class LecteurMaison{
                     int x = Integer.parseInt(ligneSplit[ligneSplit.length-2]);
                     int y = Integer.parseInt(ligneSplit[ligneSplit.length-1]);
                     int h = Integer.parseInt(ligneSplit[ligneSplit.length-4]);
-                    int l = Integer.parseInt(ligneSplit[ligneSplit.length-2]);
+                    int l = Integer.parseInt(ligneSplit[ligneSplit.length-3]);
                     salleCourante.setPosInit(x, y);
                     salleCourante.setH(h);
                     salleCourante.setL(l);

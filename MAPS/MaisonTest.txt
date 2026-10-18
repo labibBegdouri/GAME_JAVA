@@ -1,16 +1,25 @@
+# une seule port on abondonne l'idée de deux portes
+# les salles doivent être sépraé par un mure de largeur 1, la porte fait parti de se mure
+# x0,y0 est une bloque non libre 
+# comportemtn bizzare pour setPsiton(cible++)
+
+
 Salle:Hall:6:8:0:0
-PORTE:OUVERTE:0:DROITE:Couloir:7:2
+PORTE:O:0:DROITE:Couloir:9:2
 CLE:CleDoree:1:1:1:2:3
 ARME:Epee:2:2:15:5:1
 
-Salle:Couloir:6:10:8:0
-PORTE:OUVERTE:0:GAUCHE:Hall:8:2
-PORTE:VERROUILLEE:1:HAUT:SalleTresor:12:5
+Salle:Couloir:6:10:9:0
+PORTE:O:0:GAUCHE:Hall:9:2
+PORTE:F:1:HAUT:SalleTresor:12:7
 FOOD:Pomme:3:1:10:10:1
 MONSTRE:40:Massue:8:15:3
 ALLIE:30:NON:Dague:5:9:4
 REVEIL:14:1
 
-Salle:SalleTresor:5:6:10:6
+Salle:SalleTresor:5:6:10:7
+PORTE:O:0:BAS:Couloir:12:7
 MONSTRE:60:Hache:12:13:8
 TRESOR:14:10
+
+

@@ -8,7 +8,7 @@ import SAC.*;
 
 public class Heros extends Personnage{
     private Sac sac;
-    private List<Allie> allieHeros;
+    private ArrayList<Allie> allieHeros;
     
     public Heros(int capacite) {
         super("HERO");
@@ -16,7 +16,7 @@ public class Heros extends Personnage{
         this.allieHeros = new ArrayList<Allie>();
     }
 
-    public List<Allie> getAllieHeros() {
+    public ArrayList<Allie> getAllieHeros() {
         return this.allieHeros;
     }
 
@@ -34,7 +34,7 @@ public class Heros extends Personnage{
     }
 
     public List<Arme> getArmesDuSac() {
-        List<Arme> armes = new ArrayList<>();
+        ArrayList<Arme> armes = new ArrayList<>();
         for (Item item : this.sac.getSAC()) {
             if (item instanceof Arme) {
                 armes.add((Arme) item);
@@ -43,8 +43,8 @@ public class Heros extends Personnage{
         return armes;
     }
 
-    public List<Food> getFoodDuSac() {
-        List<Food> foods = new ArrayList<>();
+    public ArrayList<Food> getFoodDuSac() {
+        ArrayList<Food> foods = new ArrayList<>();
         for (Item item : this.sac.getSAC()) {
             if (item instanceof Food) {
                 foods.add((Food) item);
