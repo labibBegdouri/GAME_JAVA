@@ -33,28 +33,26 @@ public class Combat {
         return choix ;
     }
 
-    public Personnage choixMonstre(){
+    public Personnage choixMonstre( List<Personnage> contre){
         Scanner scanner = new Scanner(System.in);
         int choix = 0;
         
-        for (Allie p : this.alliesTraitre){
+        for (Personnage p : contre){
             System.out.println("choisis " + choix + "pour attaquer" + p.getNom() +" qui a un pv = " + p.getPv());
             choix++;
         }
-        System.out.println("choisis " + choix + "pour attaquer" + monstre.getNom() +" qui a un pv = " + monstre.getPv());
         choix = scanner.nextInt();
         scanner.close();
-        if (choix < this.alliesTraitre.size()){
-            return this.alliesTraitre.get(choix);
-        }
-        return this.monstre;
+        Personnage victime = contre.get(choix) ;
+        return victime;
+        
     }
 
     public Arme choix_arme(){
         List<Arme> armes = this.hero.getArmesDuSac();
         Scanner arme_scanner = new Scanner(System.in);
         System.out.println("choisi une arme");
-        int i = 1 ;
+        int i = 0 ;
         for (Arme arme : armes){
             System.out.println(i +" pour l'arme "+ arme.getNom()+" avec un degat de "+arme.getDegat());
             i++;
@@ -64,14 +62,20 @@ public class Combat {
         return arme ;
     }
 
-    public Arme gestion_choix(int choix , Arme a){
+    public Arme gestion_choix(int choix , Arme a, List<Personnage> contre){
         switch (choix){
             case 1:
-                Personnage monstreAattaquer = choixMonstre(); 
-                this.hero.attaquer(monstreAattaquer,a);
+                Personnage victime = choixMonstre(contre); 
+                this.hero.attaquer(victime,a);
+                if (victime.getEstMort()){
+                    contre.remove(victime);
+                }
+                System.out.println("tu as attaque " + victime.getNom());
                 return a ;
             case 2 :
-                return choix_arme();
+                Arme arme = choix_arme();
+                System.out.println("tu as choisis l'arme " + arme.getNom() + "qui a pour degat" + arme.getDegat());
+                return arme;
             case 3 :
                 List<Food> consommables = this.hero.getFoodDuSac();
                 Scanner food_scanner = new Scanner(System.in);
@@ -83,6 +87,9 @@ public class Combat {
                 }
                 Food food = consommables.get(food_scanner.nextInt());
                 this.hero.consommer(food);
+                food_scanner.close();
+                System.out.println("tu as mange " + food.getNom() + "ton pv actuel est " + this.hero.getPv());
+
                 return a ;
         }
         return a ;
@@ -116,14 +123,15 @@ public class Combat {
         Random random = new Random();
         while (!this.hero.getEstMort() || (!this.monstre.getEstMort() && !alliesTraitreMort())) {
             int choix = this.choix_scanner();
-            arme_choisie = this.gestion_choix(choix, arme_choisie);
-
-            for(Allie allié : this.allies){
+            arme_choisie = this.gestion_choix(choix, arme_choisie,contre);
+            for(Allie allie : this.allies){
                 Personnage victime = contre.get(random.nextInt(contre.size()));
-                allié.attaquer(victime,allié.getArme());
-                
+                allie.attaquer(victime,allie.getArme());
+                System.out.println("ton allie " + allie.getNom()+ " a attaque " +  victime.getNom());
+
                 if(victime.getEstMort()){
                     contre.remove(victime);
+                    System.out.println(victime.getNom() + " est mort");
                 }
             }
 
@@ -131,14 +139,21 @@ public class Combat {
                 Personnage victime = avec.get(random.nextInt(avec.size()));
                 if (monstre instanceof Monstre){
                     this.monstre.attaquer(victime,this.monstre.getArme());
+                    System.out.println("le monstre " + this.monstre.getNom()+ " a attaque " +  victime.getNom());
+
                 }else{
                     Allie allieTraitre = (Allie) monstre;
                     allieTraitre.attaquer(victime, allieTraitre.getArme());
+                    System.out.println("le monstre " + allieTraitre.getNom()+ " a attaque " +  victime.getNom());
+
                 }
 
                 if(victime.getEstMort()){
                     avec.remove(victime);
+                    System.out.println(victime.getNom() + " est mort");
                 }
+
+                
             }
 
         }
