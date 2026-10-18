@@ -87,9 +87,7 @@ public class MenuConfig {
         }
     }
 
-    public Heros demarageJeu() {
-        Scanner scanner = new Scanner(System.in);
-
+    public Heros demarageJeu(Scanner scanner) {
         System.out.println("----Configuration du jeu----");
 
         int pvInit = demanderEntier(scanner, "Entrez les points de vie des personnages :");
@@ -98,7 +96,6 @@ public class MenuConfig {
         Heros heros = new Heros(cap);
 
         System.out.println("Configuration terminee. L'aventure commence !");
-        scanner.close();
 
         return heros;
     }
@@ -247,7 +244,20 @@ public class MenuConfig {
         Sac sac  = heros.getSac();
 
         while (true) {
-            int id = demanderEntier(scanner, "Choisis l'ID de la nourriture souhaite (-1 pour finir)");
+            int id = 0;
+            boolean saisieValide = false;
+
+            while (!saisieValide) {
+                System.out.println("Choisis l'ID de la nourriture souhaite (-1 pour finir)");
+                if (scanner.hasNextInt()) {
+                    id = scanner.nextInt();
+                        saisieValide = true;
+                } else {
+                    System.out.println("Erreur : vous devez saisir un nombre valide.");
+                    scanner.next();
+                }
+            }
+
             if (id == -1) {
                 return ;
             } else { 
@@ -264,13 +274,13 @@ public class MenuConfig {
     }
 
     public void bouclePrinc(){
-        Heros heros = demarageJeu();
+        Scanner scanner = new Scanner(System.in);
+        Heros heros = demarageJeu(scanner);
         LecteurMaison lecteur = new LecteurMaison();
         Maison maison = lecteur.chargerDepuisFichier("./MAPS/MaisonTest.txt"); 
         heros.setPosition(maison.getPosReveil().getX(), maison.getPosReveil().getY());
 
         Salle salleCourante = maison.getSalleReveil();
-        Scanner scanner = new Scanner(System.in);
 
         while (!heros.getEstMort()) {
             statutHeros(heros, salleCourante);
