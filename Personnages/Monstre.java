@@ -1,10 +1,10 @@
 package Personnages;
 import SAC.*;
 
-public class Creature extends Personnage{
+public class Monstre extends Personnage{
     private Arme arme;
 
-    public Creature(Arme a) {
+    public Monstre(Arme a) {
         super("MONSTRE");
         this.arme = a;
     }
