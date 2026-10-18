@@ -160,6 +160,7 @@ public class Combat {
                 }
             }
         }
+        scanner.close();
     }
 }
 
