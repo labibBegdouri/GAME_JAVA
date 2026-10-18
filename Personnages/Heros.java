@@ -3,14 +3,30 @@ package Personnages;
 import java.util.ArrayList;
 import java.util.List;
 
+import MAPS.*;
 import SAC.*;
 
 public class Heros extends Personnage{
     private Sac sac;
+    private List<Allie> allieHeros;
     
     public Heros(int capacite) {
         super("HERO");
         this.sac = new Sac(capacite);
+        this.allieHeros = new ArrayList<Allie>();
+    }
+
+    public List<Allie> getAllieHeros() {
+        return this.allieHeros;
+    }
+
+    public void addAllie(Allie a, Salle salleCourante) {
+        this.allieHeros.add(a);
+        salleCourante.supprimerPersonnage(a);
+    }
+
+    public void removeAllie(Allie a) {
+        this.allieHeros.remove(a);
     }
 
     public Sac getSac() {
