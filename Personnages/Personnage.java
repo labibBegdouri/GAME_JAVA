@@ -8,7 +8,6 @@ public abstract class Personnage {
     private int pv;
     private boolean estMort;
     private Position pos;
-
     public static void initialiserPvInit(int pvI){
         pvInit = pvI;
     }

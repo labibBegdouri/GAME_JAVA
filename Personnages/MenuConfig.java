@@ -1,5 +1,6 @@
 package Personnages;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -102,6 +103,14 @@ public class MenuConfig {
         return heros;
     }
 
+    private void setPositionAllie(Heros heros) {
+        int xCible = heros.getPosition().getX();
+        int yCible = heros.getPosition().getY();
+        for (Allie a : heros.getAllieHeros()) {
+            a.setPosition(xCible, yCible);
+        }
+    }
+
     public void afficherSac(Sac sac) {
         if (sac.getFullness() != 0) {
             System.out.println("Votre sac contient :");
@@ -157,6 +166,7 @@ public class MenuConfig {
 
         if (x0 < xCible && xCible < x0 + l && y0 < yCible && yCible < y0 + h) {
             heros.setPosition(xCible, yCible);
+            setPositionAllie(heros);
             return salleCourante;
         } else {
             for (Porte porte : salleCourante.getPortes().values()) {
@@ -182,6 +192,7 @@ public class MenuConfig {
                                             heros.setPosition(xCible++, yCible);
                                             break;
                                     }
+                                    setPositionAllie(heros);
                                 }
                             }
                         }
@@ -200,6 +211,7 @@ public class MenuConfig {
                                 heros.setPosition(xCible++, yCible);
                                 break;
                         }
+                        setPositionAllie(heros);
                     }
 
                     return porte.getAutreSalle(salleCourante);
@@ -254,8 +266,9 @@ public class MenuConfig {
     public void bouclePrinc(){
         Heros heros = demarageJeu();
         LecteurMaison lecteur = new LecteurMaison();
-        Maison maison = lecteur.chargerDepuisFichier("/MAPS/MaisonText.txt"); 
-        
+        Maison maison = lecteur.chargerDepuisFichier("./MAPS/MaisonTest.txt"); 
+        heros.setPosition(maison.getPosReveil().getX(), maison.getPosReveil().getY());
+
         Salle salleCourante = maison.getSalleReveil();
         Scanner scanner = new Scanner(System.in);
 
@@ -268,6 +281,46 @@ public class MenuConfig {
             System.out.println("BAS : " + radar(salleCourante, new Position(heros.getPosition().getX(), heros.getPosition().getY() - 1)));
             System.out.println("DROITE : " + radar(salleCourante, new Position(heros.getPosition().getX() + 1, heros.getPosition().getY())));
             System.out.println("GAUCHE : " + radar(salleCourante, new Position(heros.getPosition().getX() - 1, heros.getPosition().getY())));
+
+            for (Personnage pers : salleCourante.getPersonnages()) {
+                if (pers.getPosition().equals(heros.getPosition()) && !heros.getAllieHeros().contains(pers)) {
+                    if (pers instanceof Allie) {
+                        Allie a = (Allie) pers;
+                        System.out.println(a.getNom() + "est mtn votre allie");
+                        heros.addAllie(a, salleCourante);
+                    } 
+                    if (pers instanceof Monstre) {
+                        Monstre m = (Monstre) pers;
+                        List<Allie> vraiAllie = new ArrayList<Allie>();
+                        List<Allie> allieTraitre = new ArrayList<Allie>();
+                        
+                        for (Allie a : heros.getAllieHeros()) {
+                            if (a.getTrahison()) {
+                                allieTraitre.add(a);
+                                heros.removeAllie(a);
+                            } else {
+                                vraiAllie.add(a);
+                            }
+                        }
+
+                        //Combat combat = new Combat(heros, m, allieTraitre, vraiAllie);
+
+                        System.out.println("Fait attention !!" + m.getNom() + " vous attaque");
+
+                        if (!allieTraitre.isEmpty()) {
+                            System.out.print("Vous etes trahi par : ");
+                            for (Allie a : allieTraitre) {
+                                System.out.print(a.getNom() + " ");
+                            }
+                            System.out.println();
+                        }
+                        
+                        // combat.Combattre();
+                    }
+                }
+
+                
+            }
 
             int maxChoix = 3;
             System.out.println("Actions possibles :");
