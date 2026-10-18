@@ -117,27 +117,39 @@ public class Combat {
         while (!this.hero.getEstMort() || (!this.monstre.getEstMort() && !alliesTraitreMort())) {
             int choix = this.choix_scanner();
             arme_choisie = this.gestion_choix(choix, arme_choisie);
+
             for(Allie allié : this.allies){
                 Personnage victime = contre.get(random.nextInt(contre.size()));
                 allié.attaquer(victime,allié.getArme());
+                
+                if(victime.getEstMort()){
+                    contre.remove(victime);
+                }
             }
 
-            for(Allie monstre : this.alliesTraitre){
+            for(Personnage monstre : contre){
                 Personnage victime = avec.get(random.nextInt(avec.size()));
-                monstre.attaquer(victime,monstre.getArme());
+                if (monstre instanceof Monstre){
+                    this.monstre.attaquer(victime,this.monstre.getArme());
+                }else{
+                    Allie allieTraitre = (Allie) monstre;
+                    allieTraitre.attaquer(victime, allieTraitre.getArme());
+                }
+
+                if(victime.getEstMort()){
+                    avec.remove(victime);
+                }
             }
 
-
-            Personnage victime = avec.get(random.nextInt(avec.size()));
-            this.monstre.attaquer(victime,this.monstre.getArme());
         }
 
-        for (Allie a : allies){
-            if (a.getEstMort()){
-                this.hero.removeAllie(a);
+        if (!this.hero.getEstMort()){
+            for (Allie a : allies){
+                if (a.getEstMort()){
+                    this.hero.removeAllie(a);
+                }
             }
         }
-  
     }
 }
 

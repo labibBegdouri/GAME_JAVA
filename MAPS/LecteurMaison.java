@@ -135,7 +135,7 @@ public class LecteurMaison{
                         int degatArme = Integer.parseInt(contenuSplit[3]);
 
                         Arme armeMonstre = new Arme(nomArme, 0, 1, degatArme);
-                        Creature m = new Creature (armeMonstre);
+                        Monstre m = new Monstre (armeMonstre);
                         m.setPosition(x, y);
                         salle.ajouterPersonnage(m);
                     }
