@@ -11,11 +11,11 @@ import SAC.Arme;
 import SAC.Food ;
 
 public class Combat {
-    private Set<Creature> heros;
-    private Creature monstre;
+    private Set<Monstre> heros;
+    private Monstre monstre;
     private Heros hero;
 
-    public Combat(Heros hero, Creature monstre) {
+    public Combat(Heros hero, Monstre monstre) {
         this.hero = hero;
         this.monstre = monstre;
         this.heros = new HashSet<>();
@@ -95,7 +95,7 @@ public class Combat {
         while (!this.hero.getEstMort() && !this.monstre.getEstMort()) {
             int choix = this.choix_scanner();
             Arme armeChoisie = this.gestion_choix(choix, arme_choisie);
-            for(Creature allié : this.heros){
+            for(Monstre allié : this.heros){
                 allié.attaquer(this.monstre);
             }
             Personnage victime = perso.get(random.nextInt(perso.size()));
