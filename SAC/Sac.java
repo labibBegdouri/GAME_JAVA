@@ -65,10 +65,21 @@ public class Sac {
 
     }
 
-
     public String getString(){
         return items.toString();
-            
+        
+    }
+    
+    @Override 
+    public String toString(){
+        String output="Sac ={ ";
+        int i=1;
+        for (Item e: this.items){
+            output=output+i+".<"+e.toString()+"> ";
+            i++;
+
+        }
+        return output+"}";
     }
 
 

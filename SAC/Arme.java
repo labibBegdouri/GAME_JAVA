@@ -22,8 +22,8 @@ public class Arme extends Item {
     
 
     @Override
-    public String getString(){
-        return "{ name = "+ getNom()+", Type = Food" + ", attack = "+ degat +" }" ;
+    public String toString(){
+        return "{ name = "+ getNom()+", Type = Arme" + ", attack = "+ degat +" }" ;
         
     }
 

@@ -18,7 +18,7 @@ public class Cle extends Item {
     }
 
     @Override
-    public String getString(){
+    public String toString(){
         return "{ name = "+ getNom()+", Type = Clé" + " }" ;
         
     }

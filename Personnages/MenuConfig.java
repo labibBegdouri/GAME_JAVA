@@ -115,10 +115,13 @@ public class MenuConfig {
 
     public void afficherSac(Sac sac) {
         if (sac.getFullness() != 0) {
+            int i = 1;
             System.out.println("Votre sac contient :");
             for (Item obj : sac.getSAC()) {
                 System.out
-                        .println("- " + obj.getNom() + " ,sa taille = " + obj.getSize() + ", son ID = " + obj.getId());
+                        .println(i + " - " + obj.getNom() + " ,sa taille = " + obj.getSize() + ", son ID = "
+                                + obj.getId());
+                i++;
             }
         } else {
             System.out.println("Votre sac est vide !!");
@@ -172,7 +175,7 @@ public class MenuConfig {
             setPositionAllie(heros);
             return salleCourante;
         } else {
-            Cle cle =new Cle(null, h, null);
+            Cle cle = new Cle(null, h, null);
             for (Porte porte : salleCourante.getPortes().values()) {
                 Position p = new Position(xCible, yCible);
                 if (p.equals(porte.getPosition())) {
@@ -201,7 +204,7 @@ public class MenuConfig {
                                             xCible++;
                                             heros.setPosition(xCible++, yCible);
                                             break;
-                                        }
+                                    }
                                     setPositionAllie(heros);
                                 }
                             }
@@ -209,7 +212,7 @@ public class MenuConfig {
                         if (cmp == 0) {
                             System.out.println("La porte est fermée cherche le clé");
                             return salleCourante;
-                        }else{
+                        } else {
                             heros.getSac().remove(cle);
 
                         }
@@ -274,7 +277,9 @@ public class MenuConfig {
             boolean saisieValide = false;
 
             while (!saisieValide) {
-                System.out.println("Choisis l'ID de la nourriture souhaite (-1 pour finir)");
+                System.out.println("Choisis la nourriture souhaite (0 pour finir)");
+                System.out.println(heros.getSac().toString());
+
                 if (scanner.hasNextInt()) {
                     id = scanner.nextInt();
                     saisieValide = true;
@@ -284,10 +289,10 @@ public class MenuConfig {
                 }
             }
 
-            if (id == -1) {
+            if (id == 0) {
                 return;
             } else {
-                Item obj = sac.getSAC().get(id);
+                Item obj = sac.getSAC().get(id-1);
                 if (obj instanceof Food) {
                     Food f = (Food) obj;
                     heros.consommer(f);
@@ -305,6 +310,7 @@ public class MenuConfig {
         LecteurMaison lecteur = new LecteurMaison();
         Maison maison = lecteur.chargerDepuisFichier("./MAPS/MaisonTest.txt");
         heros.setPosition(maison.getPosReveil().getX(), maison.getPosReveil().getY());
+        heros.getSac().collect(new Arme("mains", 0, 1, 1));
 
         ArrayList<String> options = new ArrayList<String>(List.of("M", "L", "K", "J", "H", "Z", "D", "S", "Q"));
         Salle salleCourante = maison.getSalleReveil();
@@ -348,7 +354,7 @@ public class MenuConfig {
                             }
                         }
 
-                        // Combat combat = new Combat(heros, m, allieTraitre, vraiAllie);
+                        Combat combat = new Combat(heros, m, allieTraitre, vraiAllie);
 
                         System.out.println("Fait attention !!" + m.getNom() + " vous attaque");
 
@@ -360,7 +366,11 @@ public class MenuConfig {
                             System.out.println();
                         }
 
-                        // combat.Combattre();
+                        combat.Combattre(scanner);
+                        if (m.getEstMort()) {
+                            salleCourante.getPersonnages().remove(m);
+                        }
+                        continue;
                     }
                 }
 

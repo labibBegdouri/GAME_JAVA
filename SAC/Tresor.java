@@ -18,8 +18,8 @@ public class Tresor extends Item {
     public Tresor(String nom, int id){
         super(nom,id);
     }
-    public String getString(){
-        return "{TRESOR !!!!!!!!!!!! L7WA!!!!!!!!!!!!!!!!}" ;
+    public String totString(){
+        return "{TRESOR}" ;
         
     }
 

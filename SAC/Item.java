@@ -64,8 +64,7 @@ public class  Item{
     }
 
 
-
-    public String getString(){
+    public String toString(){
         return "";
         
     }

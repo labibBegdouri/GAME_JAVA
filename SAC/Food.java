@@ -24,7 +24,7 @@ public class Food extends Item  {
     }
 
     @Override
-    public String getString(){
+    public String toString(){
         return "{ name = "+ getNom()+", Type = Food" + ", Bonus = "+getBonus()+" }" ;
         
     }
