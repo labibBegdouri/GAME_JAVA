@@ -109,6 +109,9 @@ public class LecteurMaison{
                 maison.setPosReveil(x,y);
                 break;
             case "TRESOR":
+                Tresor tresor=new Tresor("tresor",  Integer.parseInt(contenuSplit[1]));
+                tresor.setPosition(x,y);
+                salle.deposerObjet(tresor);
                 maison.setSalleTresor(salle.getSalleNom());
                 maison.setPosTresor(x, y);
 

@@ -15,7 +15,7 @@ public class Tresor extends Item {
         this.pos= new Position(x,y);
     }
 
-    public Tresor(String nom, int id,Item tresor){
+    public Tresor(String nom, int id){
         super(nom,id);
     }
     public String getString(){

@@ -63,7 +63,7 @@ public class MenuConfig {
         int l = salleCourante.getL();
         int h = salleCourante.getH();
 
-        if (x0 < x && (x <= x0 + l) && y0 < y &&( y <= y0 + h)) /* la position est au sein de la salle */ {
+        if (x0 < x && (x <= x0 + l) && y0 < y && (y <= y0 + h)) /* la position est au sein de la salle */ {
             String contenu = "";
             for (Item obj : salleCourante.getObjetsParSol()) {
                 if (p.equals(obj.getPosition())) {
@@ -172,14 +172,15 @@ public class MenuConfig {
             setPositionAllie(heros);
             return salleCourante;
         } else {
+            Cle cle =new Cle(null, h, null);
             for (Porte porte : salleCourante.getPortes().values()) {
                 Position p = new Position(xCible, yCible);
                 if (p.equals(porte.getPosition())) {
                     if (porte.estFermee()) {
-                        int cmp=0;
+                        int cmp = 0;
                         for (Item obj : heros.getSac().getSAC()) {
                             if (obj instanceof Cle) {
-                                Cle cle = (Cle) obj;
+                                cle = (Cle) obj;
                                 if (porte.ouvrirPorte(cle.getCleId())) {
                                     cmp++;
                                     switch (dir) {
@@ -200,14 +201,17 @@ public class MenuConfig {
                                             xCible++;
                                             heros.setPosition(xCible++, yCible);
                                             break;
-                                    }
+                                        }
                                     setPositionAllie(heros);
                                 }
                             }
                         }
-                        if (cmp==0){
+                        if (cmp == 0) {
                             System.out.println("La porte est fermée cherche le clé");
                             return salleCourante;
+                        }else{
+                            heros.getSac().remove(cle);
+
                         }
 
                     } else {
@@ -310,12 +314,12 @@ public class MenuConfig {
             descripSalle(salleCourante);
 
             System.out.println("RADAR : (Pour se deplacer)");
-            int haut =heros.getPosition().getY() + 1;
-            int bas =heros.getPosition().getY() - 1;
-            int droite =heros.getPosition().getX() + 1;
-            int gauche =heros.getPosition().getX() - 1;
+            int haut = heros.getPosition().getY() + 1;
+            int bas = heros.getPosition().getY() - 1;
+            int droite = heros.getPosition().getX() + 1;
+            int gauche = heros.getPosition().getX() - 1;
             System.out.println("HAUT : "
-                    + radar(salleCourante, new Position(heros.getPosition().getX(),haut )));
+                    + radar(salleCourante, new Position(heros.getPosition().getX(), haut)));
             System.out.println("BAS : "
                     + radar(salleCourante, new Position(heros.getPosition().getX(), bas)));
             System.out.println("DROITE : "

@@ -20,6 +20,6 @@ REVEIL:14:1
 Salle:SalleTresor:5:6:10:7
 PORTE:O:0:BAS:Couloir:12:7
 MONSTRE:60:Hache:12:13:8
-TRESOR:14:10
+TRESOR:1:14:10
 
 
