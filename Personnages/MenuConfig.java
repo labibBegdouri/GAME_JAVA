@@ -333,6 +333,8 @@ public class MenuConfig {
             System.out.println("GAUCHE : "
                     + radar(salleCourante, new Position(gauche, heros.getPosition().getY())));
             ArrayList<Personnage> personnages = new ArrayList<>(salleCourante.getPersonnages());
+
+            Boolean monsterExist=false;
             for (Personnage pers : personnages) {
                 if (pers.getPosition().equals(heros.getPosition()) && !heros.getAllieHeros().contains(pers)) {
                     if (pers instanceof Allie) {
@@ -353,7 +355,7 @@ public class MenuConfig {
                                 vraiAllie.add(a);
                             }
                         }
-
+                        monsterExist=true;
                         Combat combat = new Combat(heros, m, allieTraitre, vraiAllie);
 
                         System.out.println("Fait attention !!" + m.getNom() + " vous attaque");
@@ -375,9 +377,11 @@ public class MenuConfig {
                 }
 
             }
-            if (heros.getEstMort()) {
+            if (heros.getEstMort() || monsterExist) {
                 break;
             }
+
+
 
             // int maxChoix = 3;
             System.out.println("Actions possibles :");
