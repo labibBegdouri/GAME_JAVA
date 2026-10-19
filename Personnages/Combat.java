@@ -105,9 +105,8 @@ public class Combat {
         return true;
     }
 
-    public void Combattre() {
+    public void Combattre(Scanner scanner) {
         this.lancerCombat();
-        Scanner scanner = new Scanner(System.in);
         Arme arme_choisie = this.choixArme(scanner);
         List<Personnage> avec = new ArrayList<>(this.allies);
         avec.add(hero);
@@ -116,7 +115,7 @@ public class Combat {
         contre.add(monstre);
 
         Random random = new Random();
-        while (!this.hero.getEstMort() || (!this.monstre.getEstMort() && !alliesTraitreMort())) {
+        while (!this.hero.getEstMort() && (!this.monstre.getEstMort() || !alliesTraitreMort())) {
             int choix = this.choixScanner(scanner);
             arme_choisie = this.gestionChoix(scanner,choix, arme_choisie,contre);
             for(Allie allie : this.allies){
@@ -147,12 +146,10 @@ public class Combat {
                     avec.remove(victime);
                     System.out.println(victime.getNom() + " est mort");
                 }
-
-                
+             
             }
-
         }
-
+        
         if (!this.hero.getEstMort()){
             for (Allie a : allies){
                 if (a.getEstMort()){
@@ -160,7 +157,6 @@ public class Combat {
                 }
             }
         }
-        scanner.close();
     }
 }
 
