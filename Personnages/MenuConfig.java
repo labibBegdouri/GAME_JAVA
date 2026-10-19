@@ -292,7 +292,7 @@ public class MenuConfig {
             if (id == 0) {
                 return;
             } else {
-                Item obj = sac.getSAC().get(id-1);
+                Item obj = sac.getSAC().get(id - 1);
                 if (obj instanceof Food) {
                     Food f = (Food) obj;
                     heros.consommer(f);
@@ -374,6 +374,9 @@ public class MenuConfig {
                     }
                 }
 
+            }
+            if (heros.getEstMort()) {
+                break;
             }
 
             // int maxChoix = 3;
