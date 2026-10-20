@@ -1,7 +1,6 @@
 package MAPS;
 
 import java.util.List;
-import java.util.Map;
 
 import Personnages.*;
 import SAC.*;
@@ -38,7 +37,7 @@ public class Affichage {
     public void afficherInfo(Salle salle){
         String [] info = new String[4];
         info[0] = "Salle : " + salle.getSalleNom();
-        info[1] = "Ta position actulle : " + "(" + hero.getPosition().getX()
+        info[1] = "Ta position actuelle : " + "(" + hero.getPosition().getX()
         + "," + hero.getPosition().getY() + ")";
         info[2] = "PV : " + hero.getPv() + " / " + hero.getPvInit();
         info[3] = "Sac : "+ hero.getSac().getFullness() + " / " + hero.getSac().getCapacity();
@@ -70,12 +69,13 @@ public class Affichage {
 
     public void afficherSac() {
         Sac sac = this.hero.getSac();
-        if (sac.getFullness() != 0) {
+        List<Item> items = sac.getSAC();
+        if (!items.isEmpty()) {
             int i = 0;
-            String[] sacInfo = new String[1 + sac.getFullness()];
+            String[] sacInfo = new String[1 + items.size()];
             sacInfo[i] = "Votre sac contient :";
             i++;
-            for (Item obj : sac.getSAC()) {
+            for (Item obj : items) {
                 sacInfo[i] = i + "." + obj.toString();
                 i++;
             }
@@ -190,6 +190,5 @@ public class Affichage {
             }
             System.out.println();
         }
-        System.out.println("Légende : [H] Héros | [M] Monstre | [L] Allié | [P] Porte | [K] Clé | [A] Arme | [F] Food | [T] Trésor\n");
-    }
+        System.out.println("Legende : [H] Heros | [M] Monstre | [L] Allie | [P] Porte | [K] Cle | [A] Arme | [F] Nourriture | [T] Tresor\n");    }
 }

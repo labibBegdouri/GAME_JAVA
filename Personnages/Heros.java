@@ -10,8 +10,8 @@ public class Heros extends Personnage{
     private Sac sac;
     private ArrayList<Allie> allieHeros;
     
-    public Heros(int capacite) {
-        super("HERO");
+    public Heros(int pvInit,int capacite) {
+        super("HERO",pvInit);
         this.sac = new Sac(capacite);
         this.allieHeros = new ArrayList<Allie>();
     }
@@ -58,5 +58,14 @@ public class Heros extends Personnage{
         int newPv = this.getPv() + f.getBonus();
         this.setPv(newPv);
         this.sac.remove(f);
+    }
+
+    public boolean possedeTresor() {
+        for (Item item : this.sac.getSAC()) {
+            if (item instanceof Tresor) {
+                return true;
+            }
+        }
+        return false;
     }
 }

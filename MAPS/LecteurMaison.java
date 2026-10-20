@@ -50,7 +50,8 @@ public class LecteurMaison{
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Impossible de charger la carte : " + chemin);
+            throw new RuntimeException("Erreur de chargement du fichier de carte", e);
         }
 
         //Connecter les portes.
@@ -117,23 +118,22 @@ public class LecteurMaison{
 
                 break;
             case "ARME":
-                if (contenuSplit.length >= 5) {
+                if (contenuSplit.length >= 7) {
                      Arme a = new Arme(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), Integer.parseInt(contenuSplit[4]));
                      a.setPosition(x, y);
                      salle.deposerObjet(a);
                 }
                 break;
             case "FOOD":
-                // Syntaxe attendue -> FOOD:Nom:Id:Size:Bonus (ex: FOOD:POMME:1:1:15)
-                if (contenuSplit.length >= 5) {
+                if (contenuSplit.length >= 7) {
                     Food f = new Food(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), Integer.parseInt(contenuSplit[4]));
                     f.setPosition(x, y);
                     salle.deposerObjet(f);
                 }
                 break;
             case "MONSTRE":
-                if (contenuSplit.length >= 4) {
-                        int pvInit = Integer.parseInt(contenuSplit[1]);
+                if (contenuSplit.length >= 6) {
+                        //int pvInit = Integer.parseInt(contenuSplit[1]);
                         String nomArme = contenuSplit[2];
                         int degatArme = Integer.parseInt(contenuSplit[3]);
 
@@ -144,20 +144,21 @@ public class LecteurMaison{
                     }
                     break;
             case "ALLIE":
-                if (contenuSplit.length >= 5) {
+                if (contenuSplit.length >= 7) {
                     int pvInit = Integer.parseInt(contenuSplit[1]);
                     String nomArme = contenuSplit[3];
                     int degatArme = Integer.parseInt(contenuSplit[4]);
                     
                     Arme armeAllie = new Arme(nomArme, 0, 1, degatArme);
-                    boolean trahison = Boolean.parseBoolean(contenuSplit[2]);
-                    Allie allie = new Allie(trahison, armeAllie);
+                    String trahisonStr = contenuSplit[2].trim().toLowerCase();
+                    boolean trahison = trahisonStr.equals("oui");
+                    Allie allie = new Allie(pvInit,trahison, armeAllie);
                     allie.setPosition(x, y);
                     salle.ajouterPersonnage(allie);
                 }
                 break;
             case "CLE":
-                if (contenuSplit.length >= 5) {
+                if (contenuSplit.length >= 7) {
                     Cle c = new Cle(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), contenuSplit[4]);
                     c.setPosition(x, y);
                     salle.deposerObjet(c);

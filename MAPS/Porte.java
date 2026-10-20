@@ -4,7 +4,7 @@ package MAPS;
 public class Porte{
 
     private String fermee;  //  Porte O ou F
-    private String cleId; //Si F
+    private String cleId; //Si F ou "TRESOR"
     private Salle salleA;
     private Salle salleB;
     private Position pos;
@@ -47,6 +47,18 @@ public class Porte{
 
     public boolean estFermee(){ //verifier si P est F
         return this.fermee.equals("F");
+    }
+
+    public boolean necessiteTresor() {
+        return "TRESOR".equalsIgnoreCase(this.cleId);
+    }
+
+    public boolean ouvrirAvecTresor() {
+        if (necessiteTresor()) {
+            this.fermee = "O";
+            return true;
+        }
+        return false;
     }
 
     public boolean ouvrirPorte(String cleId){ //verifier si cleId est la cle de P

@@ -18,8 +18,8 @@ public class Cle extends Item {
     }
 
     @Override
-    public String toString(){
-        return "{ name = "+ getNom()+", Type = Clé" + " }" ;
-        
+    
+    public String toString() {
+        return "{ Nom = " + getNom() + ", Type = Cle, Porte = " + this.cleId + " }";
     }
 }

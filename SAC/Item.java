@@ -1,5 +1,7 @@
 package SAC;
 
+import java.util.Objects;
+
 import MAPS.*;
 
 public class  Item{
@@ -7,7 +9,6 @@ public class  Item{
     private int id; // or string ????
     private int size;
     private Position pos;
-
 
     public Position getPosition(){
         return this.pos;
@@ -30,32 +31,22 @@ public class  Item{
         this.size=1;
     }
 
-
-
-    public boolean isEqual(Item item){
-        if (this.id==item.id ){
-            return true;
-        }
-        return false;
-    }
-
     public String getNom(){
         return this.nom;
     }
+
     public void setNom(String nom){
         this.nom=nom;
     }
 
-
     public int getId(){
         return this.id;
     }
+
     public void setId(int id){
         this.id=id;
     }
 
-
-    
     public int getSize(){
         return this.size;
     }
@@ -63,10 +54,23 @@ public class  Item{
         this.size=size;
     }
 
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || !(obj instanceof Item)) {
+            return false;
+        }
+        Item other = (Item) obj;
+        return this.id == other.id && Objects.equals(this.nom, other.nom);
+    }
 
-    public String toString(){
-        return "";
-        
+    public int hashCode() {
+        return Objects.hash(this.id, this.nom);
+    }
+
+    public String toString() {
+        return "{ Nom = " + this.nom + ", Type = Objet, Taille = " + this.size + " }";
     }
 
 

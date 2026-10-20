@@ -1,5 +1,7 @@
 package MAPS;
 
+import java.util.Objects;
+
 public class Position {
     private int x;
     private int y;
@@ -34,7 +36,11 @@ public class Position {
     }
 
     public int hashCode(){  //A rediscuter hh
-        return x+y;
+        return Objects.hash(this.x, this.y);
+    }
+
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ")";
     }
 
 }

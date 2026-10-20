@@ -4,16 +4,12 @@ import SAC.*;
 import MAPS.*;
 public abstract class Personnage {
     private String nom;
-    private static int pvInit = 0;
+    private int pvInit;
     private int pv;
-    private boolean estMort;
     private Position pos;
-    public static void initialiserPvInit(int pvI){
-        pvInit = pvI;
-    }
-
-    public int getPvInit(){
-        return Personnage.pvInit;
+    
+    public int getPvInit() {
+        return this.pvInit;
     }
     public void setNom(String nom){
         this.nom = nom;
@@ -35,7 +31,7 @@ public abstract class Personnage {
     public void setPv(int pv) {
         // tu ne peux pas depasser le pv initialement fixe
         if (pv < pvInit) {
-            this.pv = pv;
+            this.pv = Math.max(0, pv);
         } else {
             this.pv = pvInit;
         }
@@ -45,24 +41,16 @@ public abstract class Personnage {
         return (this.pv <= 0);
     }
 
-    public void setEstMort(boolean etat) {
-        this.estMort = etat;
-    }
 
-    public Personnage(String nom) {
+    public Personnage(String nom, int pvInit) {
         this.nom = nom;
         this.pv = pvInit;
-        this.estMort = false;
+        this.pvInit = pvInit; 
     }
 
     public void attaquer(Personnage victime, Arme a) {
-        if (!victime.getEstMort()){
-            if (victime.getPv() <= a.getDegat()){
-                victime.setPv(0);
-                victime.setEstMort(true);
-            } else {
-                victime.setPv(victime.getPv() - a.getDegat());
-            }
+        if (!victime.getEstMort() && a!=null){
+            victime.setPv(victime.getPv() - a.getDegat());
         }
     }
 }

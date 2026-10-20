@@ -60,14 +60,9 @@ public class Sac {
         if (this.items.remove(item)){
             this.addFullness(-item.getSize());
             return true;
-        };
+        }
         return false;
 
-    }
-
-    public String getString(){
-        return items.toString();
-        
     }
     
     @Override 

@@ -4,8 +4,8 @@ public class Allie extends Personnage {
     private Arme arme;
     private boolean trahison;
 
-    public Allie(boolean trahison, Arme a){
-        super("ALLIE");
+    public Allie(int pvInit,boolean trahison, Arme a){
+        super("ALLIE",pvInit);
         this.trahison = trahison;
         this.arme = a;
     }
