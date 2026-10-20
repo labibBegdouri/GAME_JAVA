@@ -9,6 +9,12 @@ import SAC.*;
 import MAPS.*;
 
 public class MenuConfig {
+    //couleurs   
+    public static final String RESET = "\u001B[0m";
+    public static final String ROUGE = "\u001B[31m";
+    public static final String VERT  = "\u001B[32m";
+
+
     private int demanderEntier(Scanner scanner, String message) {
         int valeur = 0;
         boolean saisieValide = false;
@@ -28,30 +34,6 @@ public class MenuConfig {
             }
         }
         return valeur;
-    }
-
-    public void statutHeros(Heros heros, Salle salleCourante) {
-        System.out.println("Position actuelle : " + salleCourante.getSalleNom() + " | (" + heros.getPosition().getX()
-                + ", " + heros.getPosition().getY() + ")");
-        System.out.println("PV : " + heros.getPv() + " / " + heros.getPvInit() + "| Sac : "
-                + heros.getSac().getFullness() + " / " + heros.getSac().getCapacity());
-    }
-
-    public void descripSalle(Salle s) {
-        System.out.println("Objets visibles ici : ");
-        List<Item> objects = s.getObjetsParSol();
-        List<Personnage> personnages = s.getPersonnages();
-
-        for (Item obj : objects) {
-            System.out.println("- " + obj.getNom() + " ,sa taille = " + obj.getSize() + ", sa pos = ("
-                    + obj.getPosition().getX() + ", " + obj.getPosition().getY() + ")");
-        }
-
-        System.out.println("Personnages dans la salle :");
-        for (Personnage pers : personnages) {
-            System.out.println("- " + pers.getNom() + "se trouve a (" + pers.getPosition().getX() + ", "
-                    + pers.getPosition().getY() + ")");
-        }
     }
 
     public String radar(Salle salleCourante, Position p) {
@@ -76,19 +58,19 @@ public class MenuConfig {
                 }
             }
             if (contenu.isEmpty()) {
-                return "LIBRE";
+                return VERT +"LIBRE"+ RESET;
             }
             return contenu;
         } else {
             for (Porte porte : salleCourante.getPortes().values()) {
                 if (p.equals(porte.getPosition())) {
                     if (porte.estFermee()) {
-                        return "Porte verrouille";
+                        return ROUGE +"Porte verrouille"+ RESET;
                     }
-                    return "Porte ouverte";
+                    return VERT +"Porte ouverte"+ RESET ;
                 }
             }
-            return "MUR";
+            return ROUGE +"MUR"+ RESET;
         }
     }
 
@@ -113,20 +95,6 @@ public class MenuConfig {
         }
     }
 
-    public void afficherSac(Sac sac) {
-        if (sac.getFullness() != 0) {
-            int i = 1;
-            System.out.println("Votre sac contient :");
-            for (Item obj : sac.getSAC()) {
-                System.out
-                        .println(i + " - " + obj.getNom() + " ,sa taille = " + obj.getSize() + ", son ID = "
-                                + obj.getId());
-                i++;
-            }
-        } else {
-            System.out.println("Votre sac est vide !!");
-        }
-    }
 
     public Salle deplacement(Scanner scanner, Salle salleCourante, Heros heros, Direction dir) {
         /* On capture la direction du heros */
@@ -275,11 +243,10 @@ public class MenuConfig {
         while (true) {
             int id = 0;
             boolean saisieValide = false;
-
+            Affichage aff = new Affichage(heros);
             while (!saisieValide) {
-                System.out.println("Choisis la nourriture souhaite (0 pour finir)");
-                System.out.println(heros.getSac().toString());
-
+                System.out.println("Choisis la nourriture souhaite (0 pour finir)");;
+                aff.afficherSac();
                 if (scanner.hasNextInt()) {
                     id = scanner.nextInt();
                     saisieValide = true;
@@ -307,6 +274,7 @@ public class MenuConfig {
     public void bouclePrinc() {
         Scanner scanner = new Scanner(System.in);
         Heros heros = demarageJeu(scanner);
+        Affichage aff = new Affichage(heros);
         LecteurMaison lecteur = new LecteurMaison();
         Maison maison = lecteur.chargerDepuisFichier("./MAPS/MaisonTest.txt");
         heros.setPosition(maison.getPosReveil().getX(), maison.getPosReveil().getY());
@@ -316,9 +284,9 @@ public class MenuConfig {
         Salle salleCourante = maison.getSalleReveil();
 
         while (!heros.getEstMort()) {
-            statutHeros(heros, salleCourante);
-            descripSalle(salleCourante);
-
+            aff.afficherInfo(salleCourante);
+            aff.decrireSalle(salleCourante);
+            aff.afficherSalle(salleCourante);
             System.out.println("RADAR : (Pour se deplacer)");
             int haut = heros.getPosition().getY() + 1;
             int bas = heros.getPosition().getY() - 1;
@@ -333,8 +301,7 @@ public class MenuConfig {
             System.out.println("GAUCHE : "
                     + radar(salleCourante, new Position(gauche, heros.getPosition().getY())));
             ArrayList<Personnage> personnages = new ArrayList<>(salleCourante.getPersonnages());
-
-            Boolean monsterExist=false;
+            
             for (Personnage pers : personnages) {
                 if (pers.getPosition().equals(heros.getPosition()) && !heros.getAllieHeros().contains(pers)) {
                     if (pers instanceof Allie) {
@@ -355,7 +322,7 @@ public class MenuConfig {
                                 vraiAllie.add(a);
                             }
                         }
-                        monsterExist=true;
+    
                         Combat combat = new Combat(heros, m, allieTraitre, vraiAllie);
 
                         System.out.println("Fait attention !!" + m.getNom() + " vous attaque");
@@ -371,13 +338,16 @@ public class MenuConfig {
                         combat.Combattre(scanner);
                         if (m.getEstMort()) {
                             salleCourante.getPersonnages().remove(m);
+                            aff.afficherInfo(salleCourante);
+                            aff.decrireSalle(salleCourante);
                         }
                         continue;
                     }
                 }
 
             }
-            if (heros.getEstMort() || monsterExist) {
+            if (heros.getEstMort()) {
+                System.out.println(ROUGE + "GAME OVER TRY AGAIN" + RESET);
                 break;
             }
 
@@ -438,7 +408,7 @@ public class MenuConfig {
                 // salleCourante = deplacement(scanner, salleCourante, heros);
                 // break;
                 case "L":
-                    afficherSac(heros.getSac());
+                    aff.afficherSac();
                     break;
                 case "K":
                     manger(scanner, heros);
@@ -450,7 +420,7 @@ public class MenuConfig {
                     if (!hasAllie) {
                         System.out.println("Pas d'action valide");
                     } else {
-                        System.out.println(heros.getAllieHeros().toString());
+                        aff.alliesInfo();
 
                     }
                     break;
@@ -481,7 +451,7 @@ public class MenuConfig {
             for (Item obj : heros.getSac().getSAC()) {
                 if (obj instanceof Tresor) {
                     Tresor tresor = (Tresor) obj;
-                    tresor.toString();
+                    System.out.println(tresor.toString());
                 }
             }
         }

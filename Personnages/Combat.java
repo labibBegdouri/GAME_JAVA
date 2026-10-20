@@ -1,6 +1,9 @@
 package Personnages;
 
 import java.util.Scanner;
+
+import MAPS.Affichage;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,6 +17,10 @@ public class Combat {
     private Heros hero;
     private Monstre monstre;
 
+    public static final String RESET = "\u001B[0m";
+    public static final String ROUGE = "\u001B[31m";
+    public static final String VERT  = "\u001B[32m";
+
     public Combat(Heros hero, Monstre monstre, List<Allie> alliesTraitre, List<Allie> allies) {
         this.hero = hero;
         this.monstre = monstre;
@@ -25,14 +32,13 @@ public class Combat {
         System.out.println("choisis 2 pour changer d'arme");
         System.out.println("choisis 3 pour manger et gagner des pv");
         int choix = scanner.nextInt();
-        System.out.println("tu as choisi l'option "+ choix);
         return choix ;
     }
 
     public Personnage choixMonstre(Scanner scanner, List<Personnage> contre){
         int choix = 0;
         for (Personnage p : contre){
-            System.out.println("choisis " + choix + "pour attaquer" + p.getNom() +" qui a un pv = " + p.getPv());
+            System.out.println("choisis " + choix + " pour attaquer " + p.getNom() +" qui a un pv = " + p.getPv());
             choix++;
         }
         choix = scanner.nextInt();
@@ -43,7 +49,7 @@ public class Combat {
 
     public Arme choixArme(Scanner scanner){
         List<Arme> armes = this.hero.getArmesDuSac();
-        System.out.println("choisi une arme");
+        System.out.println("choisis une arme");
         int i = 0 ;
         for (Arme arme : armes){
             System.out.println(i +" pour l'arme "+ arme.getNom()+" avec un degat de "+arme.getDegat());
@@ -55,12 +61,14 @@ public class Combat {
 
     public Food choixFood(Scanner scanner){
         List<Food> consommables = this.hero.getFoodDuSac();
-        System.out.println("choisi ce que tu veux consommer :");
+        System.out.println("choisis ce que tu veux consommer :");
         int j = 1 ;
         for (Food food : consommables){
-            System.out.println(j +" pour "+ food.getNom()+" avec un pv de "+food.getBonus());
+            System.out.println(j +" pour "+ food.getNom()+" avec un bonus de "+food.getBonus());
             j++;
         }
+
+        
         Food food = consommables.get(scanner.nextInt());
         return food;
     }
@@ -73,27 +81,26 @@ public class Combat {
                 if (victime.getEstMort()){
                     contre.remove(victime);
                 }
-                System.out.println("tu as attaque " + victime.getNom());
+                System.out.println("tu as attaque " + victime.getNom() + ", son PV actuel: " + victime.getPv());
                 return a ;
             case 2 :
                 Arme arme = choixArme(scanner);
-                System.out.println("tu as choisis l'arme " + arme.getNom() + "qui a pour degat" + arme.getDegat());
                 return arme;
             case 3 :
                 Food food = choixFood(scanner);
                 this.hero.consommer(food);
                 System.out.println("tu as mange " + food.getNom() + "ton pv actuel est " + this.hero.getPv());
-
                 return a ;
         }
         return a ;
     }
 
     public void lancerCombat() {
-        String message = "tu es entré dans une salle contenant un monstre qui a un pv =  "
-                + this.monstre.getPv() + ". Le monstre t'attaque";
+        String message = "tu es devant un monstre qui a un pv =  "
+                + this.monstre.getPv() + ", son arme " + this.monstre.getArme().getNom() +" avec un degat de "
+                + this.monstre.getArme().getDegat();
         System.out.println(message);
-        this.monstre.attaquer(this.hero,this.monstre.getArme());
+        System.out.println("Le combat commence " + VERT + "Equipe HERO" + RESET + " VS " + ROUGE + "Equipe MONSTRE" + RESET);
     }
 
     private boolean alliesTraitreMort(){
@@ -113,9 +120,10 @@ public class Combat {
 
         List<Personnage> contre = new ArrayList<>(this.alliesTraitre);
         contre.add(monstre);
-
+        Affichage aff = new Affichage(hero);
         Random random = new Random();
         while (!this.hero.getEstMort() && (!this.monstre.getEstMort() || !alliesTraitreMort())) {
+            aff.combatTour(avec, contre);
             int choix = this.choixScanner(scanner);
             arme_choisie = this.gestionChoix(scanner,choix, arme_choisie,contre);
             for(Allie allie : this.allies){
