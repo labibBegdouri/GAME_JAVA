@@ -14,7 +14,7 @@ PORTE:O:0:GAUCHE:Hall:9:2
 PORTE:F:1:HAUT:SalleTresor:12:7
 FOOD:Pomme:3:1:10:10:1
 MONSTRE:40:Massue:8:15:3
-ALLIE:30:NON:Dague:5:9:4
+ALLIE:30:NON:Dague:5:10:4
 REVEIL:14:1
 
 Salle:SalleTresor:5:6:10:7
