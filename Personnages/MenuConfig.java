@@ -6,6 +6,9 @@ import java.util.Scanner;
 
 import SAC.*;
 import MAPS.*;
+/**
+ * Configure la partie et gère les actions de l’aventure dans la console.
+ */
 
 public class MenuConfig {
     //couleurs   
@@ -14,6 +17,12 @@ public class MenuConfig {
     public static final String VERT  = "\u001B[32m";
 
 
+    /**
+     * Demande et retourne un entier strictement positif.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @param message message affiché à l’utilisateur
+     * @return un entier strictement positif saisi par l’utilisateur.
+     */
     private int demanderEntier(Scanner scanner, String message) {
         int valeur = 0;
         boolean saisieValide = false;
@@ -35,6 +44,12 @@ public class MenuConfig {
         return valeur;
     }
 
+    /**
+     * Décrit le contenu de la position observée dans la salle.
+     * @param salleCourante salle actuellement occupée
+     * @param p position observée
+     * @return une description de la position observée : son contenu, {@code LIBRE}, une porte ou un mur.
+     */
     public String radar(Salle salleCourante, Position p) {
         int x = p.getX();
         int y = p.getY();
@@ -73,6 +88,11 @@ public class MenuConfig {
         }
     }
 
+    /**
+     * Demande les paramètres de la partie et crée le héros.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @return le héros configuré pour la partie.
+     */
     public Heros demarageJeu(Scanner scanner) {
         System.out.println("----Configuration du jeu----");
 
@@ -89,6 +109,10 @@ public class MenuConfig {
         return heros;
     }
 
+    /**
+     * Place les alliés du héros à la position actuelle de celui-ci.
+     * @param heros héros concerné
+     */
     private void setPositionAllie(Heros heros) {
         int xCible = heros.getPosition().getX();
         int yCible = heros.getPosition().getY();
@@ -98,6 +122,14 @@ public class MenuConfig {
     }
 
 
+    /**
+     * Déplace le héros dans la direction indiquée et retourne la salle atteinte.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @param salleCourante salle actuellement occupée
+     * @param heros héros concerné
+     * @param dir direction de la porte
+     * @return la salle où se trouve le héros après le déplacement, ou la salle courante si le déplacement échoue.
+     */
     public Salle deplacement(Scanner scanner, Salle salleCourante, Heros heros, Direction dir) {
         int xCible = heros.getPosition().getX();
         int yCible = heros.getPosition().getY();
@@ -187,6 +219,11 @@ public class MenuConfig {
         return salleCourante;
     }
 
+    /**
+     * Ramasse l’objet situé sous le héros si le sac peut le contenir.
+     * @param salleCourante salle actuellement occupée
+     * @param heros héros concerné
+     */
     public void ramasser(Salle salleCourante, Heros heros) {
         List<Item> objSalle = salleCourante.getObjetsParSol();
         Item objCible = null;
@@ -213,6 +250,11 @@ public class MenuConfig {
         }
     }
 
+    /**
+     * Permet au héros de choisir et consommer un aliment de son sac.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @param heros héros concerné
+     */
     public void manger(Scanner scanner, Heros heros) {
         Sac sac = heros.getSac();
         List<Food> consommables = heros.getFoodDuSac();
@@ -256,6 +298,9 @@ public class MenuConfig {
         }
     }
 
+    /**
+     * Configure et exécute la boucle principale de l’aventure.
+     */
     public void bouclePrinc() {
         Scanner scanner = new Scanner(System.in);
         Heros heros = demarageJeu(scanner);

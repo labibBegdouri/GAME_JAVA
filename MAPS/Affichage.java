@@ -4,6 +4,9 @@ import java.util.List;
 
 import Personnages.*;
 import SAC.*;
+/**
+ * Affiche dans la console les informations du héros, des salles et des combats.
+ */
 
 public class Affichage {
     private Heros hero;
@@ -12,10 +15,18 @@ public class Affichage {
     public static final String ROUGE = "\u001B[31m";
     public static final String VERT  = "\u001B[32m";
 
+    /**
+     * Crée un objet Affichage avec les paramètres fournis.
+     * @param hero héros concerné
+     */
     public Affichage(Heros hero){
         this.hero =  hero;
     }
 
+    /**
+     * Affiche les lignes fournies dans une boîte encadrée.
+     * @param lignes lignes à afficher
+     */
     private void afficherBoiteEgale(String[] lignes){
         int longueurMax = 0;
         for (String ligne : lignes){
@@ -34,6 +45,10 @@ public class Affichage {
 
     }
 
+    /**
+     * Affiche les informations de la salle et du héros.
+     * @param salle salle concernée
+     */
     public void afficherInfo(Salle salle){
         String [] info = new String[4];
         info[0] = "Salle : " + salle.getSalleNom();
@@ -44,6 +59,10 @@ public class Affichage {
         afficherBoiteEgale(info);
     }
     
+    /**
+     * Affiche les objets et les personnages présents dans la salle.
+     * @param salle salle concernée
+     */
     public void decrireSalle(Salle salle){
         List<Item> objects = salle.getObjetsParSol();
         List<Personnage> personnages = salle.getPersonnages();
@@ -67,6 +86,9 @@ public class Affichage {
         afficherBoiteEgale(description);
     }
 
+    /**
+     * Affiche le contenu du sac du héros.
+     */
     public void afficherSac() {
         Sac sac = this.hero.getSac();
         List<Item> items = sac.getSAC();
@@ -85,6 +107,9 @@ public class Affichage {
         }
     }
 
+    /**
+     * Affiche les points de vie et l’arme des alliés du héros.
+     */
     public void alliesInfo(){
         List<Allie> allies = this.hero.getAllieHeros();
         String[] info = new String[1 + allies.size()];
@@ -99,6 +124,11 @@ public class Affichage {
         afficherBoiteEgale(info);
     }
 
+    /**
+     * Affiche les deux équipes participant au combat.
+     * @param avec personnages du camp du héros
+     * @param contre personnages du camp adverse
+     */
     public void combatTour(List<Personnage> avec, List<Personnage> contre){
         System.out.println(VERT + "Equipe HERO" + RESET);
         String[] avecInfo = combatTourAux(avec);
@@ -108,6 +138,11 @@ public class Affichage {
         afficherBoiteEgale(contreInfo);
     }
 
+    /**
+     * Construit les lignes d’information d’une équipe.
+     * @param pers personnages concernés
+     * @return un tableau de lignes décrivant le nom et les points de vie de chaque personnage.
+     */
     public String[] combatTourAux(List<Personnage> pers){
         String[] infoPers = new String[pers.size()];
         int i = 0 ;
@@ -118,6 +153,10 @@ public class Affichage {
         return infoPers;
     }
 
+    /**
+     * Affiche la carte de la salle et sa légende.
+     * @param salle salle concernée
+     */
     public void afficherSalle(Salle salle){
         int h = salle.getH();
         int l = salle.getL();

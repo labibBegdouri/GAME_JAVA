@@ -10,6 +10,9 @@ import java.util.Random;
 
 import SAC.Arme;
 import SAC.Food ;
+/**
+ * Déroule un combat entre le héros, ses alliés et les adversaires.
+ */
 
 public class Combat {
     private List<Allie> allies;
@@ -21,6 +24,13 @@ public class Combat {
     public static final String ROUGE = "\u001B[31m";
     public static final String VERT  = "\u001B[32m";
 
+    /**
+     * Crée un objet Combat avec les paramètres fournis.
+     * @param hero héros concerné
+     * @param monstre monstre affronté
+     * @param alliesTraitre alliés traîtres qui combattent les héros
+     * @param allies alliés du héros
+     */
     public Combat(Heros hero, Monstre monstre, List<Allie> alliesTraitre, List<Allie> allies) {
         this.hero = hero;
         this.monstre = monstre;
@@ -28,6 +38,14 @@ public class Combat {
         this.allies = allies;
     }
 
+    /**
+     * Lit un entier compris entre les bornes fournies.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @param message message affiché à l’utilisateur
+     * @param min borne minimale autorisée
+     * @param max borne maximale autorisée
+     * @return un entier compris entre les bornes minimale et maximale incluses.
+     */
     private int lireEntier(Scanner scanner, String message, int min, int max) {
         int valeur;
         while (true) {
@@ -45,6 +63,11 @@ public class Combat {
         }
     }
 
+    /**
+     * Demande au joueur quelle action effectuer pendant son tour.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @return le numéro de l’action sélectionnée par le joueur.
+     */
     public int choixScanner(Scanner scanner){
         System.out.println("1 : Attaquer");
         System.out.println("2 : Changer d'arme");
@@ -52,6 +75,12 @@ public class Combat {
         return lireEntier(scanner, "Ton action :", 1, 3);
     }
 
+    /**
+     * Demande au joueur de choisir un personnage adverse à attaquer.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @param contre personnages du camp adverse
+     * @return le personnage adverse choisi comme cible.
+     */
     public Personnage choixMonstre(Scanner scanner, List<Personnage> contre) {
         System.out.println("Choisis ta cible :");
         for (int i = 0; i < contre.size(); i++) {
@@ -62,6 +91,11 @@ public class Combat {
         return contre.get(index);
     }
 
+    /**
+     * Demande au joueur de choisir une arme dans son sac.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @return l’arme choisie, ou {@code null} si le sac ne contient aucune arme.
+     */
     public Arme choixArme(Scanner scanner) {
         List<Arme> armes = this.hero.getArmesDuSac();
         if (armes.isEmpty()) {
@@ -77,6 +111,11 @@ public class Combat {
         return armes.get(index);
     }
 
+    /**
+     * Demande au joueur de choisir un aliment dans son sac.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @return l’aliment choisi, ou {@code null} si le sac ne contient aucun aliment.
+     */
     public Food choixFood(Scanner scanner) {
         List<Food> consommables = this.hero.getFoodDuSac();
         if (consommables.isEmpty()) {
@@ -92,6 +131,14 @@ public class Combat {
         return consommables.get(index);
     }
 
+    /**
+     * Applique l’action choisie et retourne l’arme conservée pour le prochain tour.
+     * @param scanner scanner utilisé pour lire la saisie
+     * @param choix action choisie par le joueur
+     * @param a arme utilisée
+     * @param contre personnages du camp adverse
+     * @return l’arme à conserver pour l’action suivante.
+     */
     public Arme gestionChoix(Scanner scanner, int choix, Arme a, List<Personnage> contre) {
         switch (choix) {
             case 1:
@@ -117,10 +164,17 @@ public class Combat {
         return a;
     }
 
+    /**
+     * Annonce le début du combat.
+     */
     public void lancerCombat() {
         System.out.println("Un combat commence : " + VERT + "Equipe HERO" + RESET + " VS " + ROUGE + "Equipe ENNEMIS" + RESET);
     }
 
+    /**
+     * Fait jouer les participants jusqu’à la défaite du héros ou l’élimination des ennemis.
+     * @param scanner scanner utilisé pour lire la saisie
+     */
     public void Combattre(Scanner scanner) {
         this.lancerCombat();
         Arme armeChoisie = this.choixArme(scanner);

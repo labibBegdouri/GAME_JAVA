@@ -12,8 +12,16 @@ import java.io.IOException;
 
 import SAC.*;
 import Personnages.*;
+/**
+ * Lit un fichier de carte pour construire une maison, ses salles et leur contenu.
+ */
 
 public class LecteurMaison{
+    /**
+     * Charge la maison et ses éléments depuis le fichier indiqué.
+     * @param chemin chemin du fichier de carte
+     * @return la maison décrite dans le fichier.
+     */
     public Maison chargerDepuisFichier(String chemin){ // charger la map depuis le chemin
         
         Maison maison = new Maison();
@@ -88,6 +96,11 @@ public class LecteurMaison{
         return maison;
     }
 
+    /**
+     * Retourne la direction opposée à celle fournie.
+     * @param dir direction de la porte
+     * @return la direction opposée à celle fournie.
+     */
     private Direction directionOpposee(Direction dir) {
         switch (dir) {
             case HAUT: return Direction.BAS;
@@ -98,6 +111,12 @@ public class LecteurMaison{
         }
     }
 
+    /**
+     * Interprète une ligne de contenu et ajoute l’élément correspondant à la salle ou à la maison.
+     * @param contenu ligne décrivant l’élément à traiter
+     * @param salle salle concernée
+     * @param maison maison à compléter
+     */
     private void traiterContenuCase(String contenu, Salle salle, Maison maison){
         String[] contenuSplit = contenu.split(":");
         String type = contenuSplit[0];
