@@ -9,12 +9,11 @@ public class Arme extends Item {
     /**
      * Crée un objet Arme avec les paramètres fournis.
      * @param nom nom de l’élément
-     * @param id identifiant de l’élément
      * @param size taille de l’élément
      * @param degat valeur des dégâts
      */
-    public  Arme(String nom,int id,int size,int degat){
-        super(nom,id,size);
+    public  Arme(String nom,int size,int degat){
+        super(nom,size);
         this.degat=degat;
     }
 
@@ -49,7 +48,7 @@ public class Arme extends Item {
      * @return une représentation textuelle de l’objet.
      */
     public String toString(){
-        return "{ name = "+ getNom()+", Type = Arme" + ", attack = "+ degat +" }" ;
+        return "{ name = "+ getNom()+", Type = Arme" + ", attack = "+ degat + ", Size = " + super.getSize() +  " }" ;
         
     }
 

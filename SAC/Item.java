@@ -4,12 +4,11 @@ import java.util.Objects;
 
 import MAPS.*;
 /**
- * Classe de base des objets du jeu, avec un nom, un identifiant, une taille et une position.
+ * Classe de base des objets du jeu, avec un nom, une taille et une position.
  */
 
 public class  Item{
     private String nom;
-    private int id; // or string ????
     private int size;
     private Position pos;
 
@@ -34,24 +33,21 @@ public class  Item{
     /**
      * Crée un objet Item avec les paramètres fournis.
      * @param nom nom de l’élément
-     * @param id identifiant de l’élément
      * @param size taille de l’élément
      */
-    public  Item(String nom,int id,int size){
-        this.nom=nom;
-        this.id=id;
-        this.size=size;
+    public Item(String nom, int size) {
+        this.nom = nom;
+        this.size = size;
     }
+
+    
 
     /**
      * Crée un objet Item avec les paramètres fournis.
      * @param nom nom de l’élément
-     * @param id identifiant de l’élément
      */
-    public  Item(String nom,int id){
-        this.nom=nom;
-        this.id=id;
-        this.size=1;
+    public Item(String nom) {
+        this(nom, 1);
     }
 
     /**
@@ -68,22 +64,6 @@ public class  Item{
      */
     public void setNom(String nom){
         this.nom=nom;
-    }
-
-    /**
-     * Retourne l’identifiant de l’objet.
-     * @return l’identifiant de l’objet.
-     */
-    public int getId(){
-        return this.id;
-    }
-
-    /**
-     * Définit l’identifiant de l’objet.
-     * @param id identifiant de l’élément
-     */
-    public void setId(int id){
-        this.id=id;
     }
 
     /**
@@ -107,14 +87,12 @@ public class  Item{
      * @return {@code true} si l’objet fourni est égal à celui-ci, sinon {@code false}.
      */
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || !(obj instanceof Item)) {
-            return false;
-        }
+        if (this == obj) return true;
+        if (obj == null || !(obj instanceof Item)) return false;
         Item other = (Item) obj;
-        return this.id == other.id && Objects.equals(this.nom, other.nom);
+        return this.size == other.size &&
+               Objects.equals(this.nom, other.nom) &&
+               Objects.equals(this.pos, other.pos);
     }
 
     /**
@@ -122,7 +100,7 @@ public class  Item{
      * @return le code de hachage de l’objet.
      */
     public int hashCode() {
-        return Objects.hash(this.id, this.nom);
+        return Objects.hash(this.nom,this.size);
     }
 
     /**

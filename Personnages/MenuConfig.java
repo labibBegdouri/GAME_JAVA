@@ -76,7 +76,7 @@ public class MenuConfig {
             }
             return contenu;
         } else {
-            for (Porte porte : salleCourante.getPortes().values()) {
+            for (Porte porte : salleCourante.getPortes()) {
                 if (p.equals(porte.getPosition())) {
                     if (porte.estFermee()) {
                         return ROUGE +"Porte verrouille"+ RESET;
@@ -89,24 +89,63 @@ public class MenuConfig {
     }
 
     /**
-     * Demande les paramètres de la partie et crée le héros.
+     * Demande les paramètres de la partie, le choix de la carte et crée le héros.
      * @param scanner scanner utilisé pour lire la saisie
-     * @return le héros configuré pour la partie.
+     * @return un tableau contenant le héros instancié et le chemin du fichier carte choisi
      */
-    public Heros demarageJeu(Scanner scanner) {
-        System.out.println("----Configuration du jeu----");
+    public Object[] demarageJeu(Scanner scanner) {
+        System.out.println("==========================================");
+        System.out.println("       BIENVENUE DANS IMAG DUNGEON        ");
+        System.out.println("==========================================");
 
-        int pvInit = demanderEntier(scanner, "Entrez les points de vie du heros :");
+        System.out.println("\n--- Choix de la Maison ---");
+        System.out.println("1 : Facile    (Petite carte, 1 monstre, allie loyal)");
+        System.out.println("2 : Moyenne   (Carte standard, 2 monstres)");
+        System.out.println("3 : Difficile (Labyrinthe, 3 monstres puissants, trahison)");
 
-        int pvMonstres = demanderEntier(scanner, "Entrez les points de vie des monstres (communs a tous) :");
+        int choixMaison = 0;
+        while (choixMaison < 1 || choixMaison > 3) {
+            System.out.println("Choisis ta maison (1, 2 ou 3) :");
+            if (scanner.hasNextInt()) {
+                choixMaison = scanner.nextInt();
+                if (choixMaison < 1 || choixMaison > 3) {
+                    System.out.println("Choix invalide. Entre 1, 2 ou 3.");
+                }
+            } else {
+                System.out.println("Saisie invalide.");
+                scanner.next();
+            }
+        }
+
+        String cheminCarte = "";
+        switch (choixMaison) {
+            case 1:
+                cheminCarte = "./MAPS/Maisons/MaisonFacile.txt";
+                System.out.println("\n[Maison Facile sélectionnée]");
+                System.out.println("(Conseil : PV Héros: 40 | PV Monstres: 20 | Sac: 4)");
+                break;
+            case 2:
+                cheminCarte = "./MAPS/Maisons/MaisonMoyenne.txt";
+                System.out.println("\n[Maison Moyenne sélectionnée]");
+                System.out.println("(Conseil : PV Héros: 35 | PV Monstres: 30 | Sac: 3)");
+                break;
+            case 3:
+                cheminCarte = "./MAPS/Maisons/MaisonDifficile.txt";
+                System.out.println("\n[Maison Difficile sélectionnée]");
+                System.out.println("(Conseil : PV Héros: 30 | PV Monstres: 40 | Sac: 2)");
+                break;
+        }
+
+        System.out.println("\n--- Configuration des attributs ---");
+        int pvInit = demanderEntier(scanner, "Entrez les points de vie du héros :");
+        int pvMonstres = demanderEntier(scanner, "Entrez les points de vie des monstres (communs à tous) :");
         Monstre.setPvCommuns(pvMonstres);
+        int cap = demanderEntier(scanner, "Entrez la capacité du sac :");
 
-        int cap = demanderEntier(scanner, "Entrez la capacite du sac :");
-        Heros heros = new Heros(pvInit,cap);
+        Heros heros = new Heros(pvInit, cap);
+        System.out.println("\nConfiguration terminée. L'aventure commence !\n");
 
-        System.out.println("Configuration terminee. L'aventure commence !");
-
-        return heros;
+        return new Object[]{heros, cheminCarte};
     }
 
     /**
@@ -162,7 +201,7 @@ public class MenuConfig {
 
         // Verification de passage par une porte
         Position posCible = new Position(xCible, yCible);
-        for (Porte porte : salleCourante.getPortes().values()) {
+        for (Porte porte : salleCourante.getPortes()) {
             if (posCible.equals(porte.getPosition())) {
                 if (porte.estFermee()) {
                     if (porte.necessiteTresor()) {
@@ -186,12 +225,12 @@ public class MenuConfig {
                         }
 
                         if (cleTrouvee == null) {
-                            System.out.println("La porte est verrouillee ! Tu n'as pas la bonne cle.");
+                            System.out.println(ROUGE +"La porte est verrouillee ! Tu n'as pas la bonne cle."+ RESET);
                             return salleCourante;
                         }
 
                         heros.getSac().remove(cleTrouvee);
-                        System.out.println("Porte ouverte avec succes avec la cle " + cleTrouvee.getNom() + " !");
+                        System.out.println(VERT +"Porte ouverte avec succes avec la cle " + cleTrouvee.getNom() + " !"+ RESET);
                     }
                 }
 
@@ -241,13 +280,60 @@ public class MenuConfig {
                 if (objCible instanceof Tresor){
                     System.out.println(VERT + "Felicitation ! Tu as recupere le Tresor et maintenant tu dois chercher la sortie !" + RESET);
                 }
-                System.out.println("Objet ajoute au Sac");
+                System.out.println(VERT +"Objet ajoute au Sac"+ RESET);
             } else {
-                System.out.println("Sac rempli");
+                System.out.println(ROUGE +"Sac rempli"+ RESET);
             }
         }else {
-            System.out.println("Il n'y a rien a ramasser sur cette case.");
+            System.out.println(ROUGE +"Il n'y a rien a ramasser sur cette case."+ RESET);
         }
+    }
+
+    /**
+     * Permet au heros de choisir et deposer un objet de son sac dans la salle.
+     * @param scanner scanner utilise pour lire la saisie
+     * @param salleCourante salle actuellement occupee
+     * @param heros heros concerne
+     */
+    public void deposer(Scanner scanner, Salle salleCourante, Heros heros) {
+        Sac sac = heros.getSac();
+        List<Item> items = sac.getSAC();
+        if (items.isEmpty()) {
+            System.out.println("Ton sac est vide, rien a deposer.");
+            return;
+        }
+
+        Affichage aff = new Affichage(heros);
+        aff.afficherSac();
+        System.out.println("Choisis le numero de l'objet a deposer au sol (ou -1 pour annuler) :");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Saisie invalide.");
+            scanner.next();
+            return;
+        }
+
+        int choix = scanner.nextInt();
+        if (choix == -1) {
+            return;
+        }
+
+        if (choix < 1 || choix > items.size()) {
+            System.out.println("Numero invalide.");
+            return;
+        }
+
+        Item obj = items.get(choix - 1);
+
+        if (obj instanceof Arme && heros.getArmesDuSac().size() <= 1) {
+            System.out.println("Impossible de jeter cette arme : c'est la seule arme qu'il te reste !");
+            return;
+        }
+
+        sac.remove(obj);
+        obj.setPosition(heros.getPosition().getX(), heros.getPosition().getY());
+        salleCourante.deposerObjet(obj);
+        System.out.println("Tu as depose " + obj.getNom() + " au sol.");
     }
 
     /**
@@ -275,12 +361,12 @@ public class MenuConfig {
             }
 
             int choix = scanner.nextInt();
-            if (choix < 1 || choix == -1) {
+            if (choix == -1) {
                 return;
             }
 
             List<Item> items = sac.getSAC();
-            if (choix > items.size()){
+            if (choix < 1 || choix > items.size()) {
                 System.out.println("Numero invalide. Choisis un indice affiche dans le sac.");
                 continue;
             }
@@ -303,17 +389,21 @@ public class MenuConfig {
      */
     public void bouclePrinc() {
         Scanner scanner = new Scanner(System.in);
-        Heros heros = demarageJeu(scanner);
+
+        Object[] config = demarageJeu(scanner);
+        Heros heros = (Heros) config[0];
+        String cheminCarte = (String) config[1];;
+
         Affichage aff = new Affichage(heros);
+
         LecteurMaison lecteur = new LecteurMaison();
-        Maison maison = lecteur.chargerDepuisFichier("./MAPS/MaisonTest.txt");
+        Maison maison = lecteur.chargerDepuisFichier(cheminCarte);
 
         heros.setPosition(maison.getPosReveil().getX(), maison.getPosReveil().getY());
 
-        heros.getSac().collect(new Arme("mains", 0, 0, 1));
+        heros.getSac().collect(new Arme("Dague rouillee", 0, 3));
 
-        ArrayList<String> options = new ArrayList<>(List.of("L", "K", "J", "H", "Z", "D", "S", "Q"));
-        Salle salleCourante = maison.getSalleReveil();
+        ArrayList<String> options = new ArrayList<>(List.of("L", "K", "J", "H", "P", "Z", "D", "S", "Q"));        Salle salleCourante = maison.getSalleReveil();
 
         while (!heros.getEstMort()) {
             ArrayList<Personnage> personnages = new ArrayList<>(salleCourante.getPersonnages());
@@ -321,15 +411,18 @@ public class MenuConfig {
                 if (pers.getPosition().equals(heros.getPosition()) && !heros.getAllieHeros().contains(pers)) {
                     if (pers instanceof Allie) {
                         Allie a = (Allie) pers;
-                        System.out.println(a.getNom() + " rejoint vos rangs !");
+                        System.out.println(VERT + a.getNom() + " rejoint vos rangs !" + RESET);
                         heros.addAllie(a, salleCourante);
                     } else if (pers instanceof Monstre) {
+                        int numTraitre = 1;
                         Monstre m = (Monstre) pers;
                         ArrayList<Allie> vraiAllie = new ArrayList<>();
                         ArrayList<Allie> allieTraitre = new ArrayList<>();
-
+                    
                         for (Allie a : heros.getAllieHeros()) {
                             if (a.getTrahison()) {
+                                a.setNom("Traitre " + numTraitre);
+                                numTraitre++;
                                 allieTraitre.add(a);
                             } else {
                                 vraiAllie.add(a);
@@ -352,6 +445,10 @@ public class MenuConfig {
 
                         if (m.getEstMort()) {
                             salleCourante.supprimerPersonnage(m);
+                        }
+
+                        if (heros.getEstMort()) {
+                            break; 
                         }
                     }
                 }
@@ -384,9 +481,23 @@ public class MenuConfig {
             System.out.println("DROITE : " + radar(salleCourante, new Position(droite, heros.getPosition().getY())));
             System.out.println("GAUCHE : " + radar(salleCourante, new Position(gauche, heros.getPosition().getY())));
 
+            boolean objetTrouve = false;
+            for (Item obj : salleCourante.getObjetsParSol()) {
+                if (heros.getPosition().equals(obj.getPosition())) {
+                    if (!objetTrouve) {
+                        System.out.println(VERT + "SOUS TES PIEDS :" + RESET);
+                        objetTrouve = true;
+                    }
+                    System.out.println(VERT + obj.toString() + RESET);
+                }
+            }
+            if (objetTrouve) {
+                System.out.println();
+            }
+
             System.out.println("Actions possibles :");
             System.out.println("Z/ HAUT | S/ BAS | Q/ GAUCHE | D/ DROITE");
-            System.out.println("L/ Afficher Sac | K/ Manger");
+            System.out.println("L/ Afficher Sac | K/ Manger | P/ Deposer un objet");
             if (!heros.getAllieHeros().isEmpty()) {
                 System.out.println("J/ Voir tes allies");
             }
@@ -416,6 +527,9 @@ public class MenuConfig {
                     break;
                 case "H":
                     ramasser(salleCourante, heros);
+                    break;
+                case "P":
+                    deposer(scanner, salleCourante, heros);
                     break;
                 case "J":
                     if (heros.getAllieHeros().isEmpty()) {

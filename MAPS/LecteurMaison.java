@@ -62,53 +62,34 @@ public class LecteurMaison{
             throw new RuntimeException("Erreur de chargement du fichier de carte", e);
         }
 
-        //Connecter les portes.
-
-        for (String[] infoPorte : memoirePortes){
+        // Connecter les portes
+        for (String[] infoPorte : memoirePortes) {
+            // PORTE:<Etat:O/F>:<CleId/TRESOR>:<SalleCible>:<x>:<y>
             String salleName = infoPorte[0];
             String lignePorte = infoPorte[1];
             String[] lignePorteSplit = lignePorte.split(":");
-
             String etat = lignePorteSplit[1];
-            String serrureId = lignePorteSplit[2];  //L'ID ou "aucune"
-            Direction dir = Direction.valueOf(lignePorteSplit[3]);
-            String nomSalleB = lignePorteSplit[4];
+            String serrureId = lignePorteSplit[2];
+            String nomSalleB = lignePorteSplit[3];
 
             Salle salleA = maison.getSalle(salleName);
             Salle salleB = maison.getSalle(nomSalleB);
 
-            if (salleA != null && salleB != null && salleA.getPorte(dir) == null) {
-                    
+            if (salleA != null && salleB != null) {
                 Porte porte = new Porte(etat, serrureId);
-                
                 porte.setSalleA(salleA);
                 porte.setSalleB(salleB);
-                
-                salleA.addPorte(dir, porte);
-                salleB.addPorte(directionOpposee(dir), porte);
-                int x = Integer.parseInt(lignePorteSplit[lignePorteSplit.length-2]);
-                int y = Integer.parseInt(lignePorteSplit[lignePorteSplit.length-1]);
-                porte.setPosition(x,y);
-            }
 
+                int x = Integer.parseInt(lignePorteSplit[lignePorteSplit.length - 2]);
+                int y = Integer.parseInt(lignePorteSplit[lignePorteSplit.length - 1]);
+                porte.setPosition(x, y);
+
+                salleA.addPorte(porte);
+                salleB.addPorte(porte);
+            }
         }
         
         return maison;
-    }
-
-    /**
-     * Retourne la direction opposée à celle fournie.
-     * @param dir direction de la porte
-     * @return la direction opposée à celle fournie.
-     */
-    private Direction directionOpposee(Direction dir) {
-        switch (dir) {
-            case HAUT: return Direction.BAS;
-            case BAS: return Direction.HAUT;
-            case GAUCHE: return Direction.DROITE;
-            case DROITE: return Direction.GAUCHE;
-            default: return null;
-        }
     }
 
     /**
@@ -118,10 +99,10 @@ public class LecteurMaison{
      * @param maison maison à compléter
      */
     private void traiterContenuCase(String contenu, Salle salle, Maison maison){
-        String[] contenuSplit = contenu.split(":");
-        String type = contenuSplit[0];
-        int x = Integer.parseInt(contenuSplit[contenuSplit.length-2]);
-        int y = Integer.parseInt(contenuSplit[contenuSplit.length-1]);
+        String[] split = contenu.split(":");
+        String type = split[0];
+        int x = Integer.parseInt(split[split.length-2]);
+        int y = Integer.parseInt(split[split.length-1]);
 
         switch (type) {
             case "REVEIL":
@@ -129,59 +110,50 @@ public class LecteurMaison{
                 maison.setPosReveil(x,y);
                 break;
             case "TRESOR":
-                Tresor tresor=new Tresor("tresor",  Integer.parseInt(contenuSplit[1]));
-                tresor.setPosition(x,y);
+                Tresor tresor = new Tresor(1);
+                tresor.setPosition(x, y);
                 salle.deposerObjet(tresor);
                 maison.setSalleTresor(salle.getSalleNom());
                 maison.setPosTresor(x, y);
-
                 break;
+
             case "ARME":
-                if (contenuSplit.length >= 7) {
-                     Arme a = new Arme(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), Integer.parseInt(contenuSplit[4]));
-                     a.setPosition(x, y);
-                     salle.deposerObjet(a);
-                }
+                // ARME:<Nom>:<Taille>:<Degats>:<x>:<y>
+                Arme a = new Arme(split[1], Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+                a.setPosition(x, y);
+                salle.deposerObjet(a);
                 break;
-            case "FOOD":
-                if (contenuSplit.length >= 7) {
-                    Food f = new Food(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), Integer.parseInt(contenuSplit[4]));
-                    f.setPosition(x, y);
-                    salle.deposerObjet(f);
-                }
-                break;
-            case "MONSTRE":
-                if (contenuSplit.length >= 6) {
-                        //int pvInit = Integer.parseInt(contenuSplit[1]);
-                        String nomArme = contenuSplit[2];
-                        int degatArme = Integer.parseInt(contenuSplit[3]);
 
-                        Arme armeMonstre = new Arme(nomArme, 0, 1, degatArme);
-                        Monstre m = new Monstre (armeMonstre);
-                        m.setPosition(x, y);
-                        salle.ajouterPersonnage(m);
-                    }
-                    break;
-            case "ALLIE":
-                if (contenuSplit.length >= 7) {
-                    int pvInit = Integer.parseInt(contenuSplit[1]);
-                    String nomArme = contenuSplit[3];
-                    int degatArme = Integer.parseInt(contenuSplit[4]);
-                    
-                    Arme armeAllie = new Arme(nomArme, 0, 1, degatArme);
-                    String trahisonStr = contenuSplit[2].trim().toLowerCase();
-                    boolean trahison = trahisonStr.equals("oui");
-                    Allie allie = new Allie(pvInit,trahison, armeAllie);
-                    allie.setPosition(x, y);
-                    salle.ajouterPersonnage(allie);
-                }
+            case "FOOD":
+                // FOOD:<Nom>:<Taille>:<SoinPV>:<x>:<y>
+                Food f = new Food(split[1], Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+                f.setPosition(x, y);
+                salle.deposerObjet(f);
                 break;
+
             case "CLE":
-                if (contenuSplit.length >= 7) {
-                    Cle c = new Cle(contenuSplit[1], Integer.parseInt(contenuSplit[2]), Integer.parseInt(contenuSplit[3]), contenuSplit[4]);
-                    c.setPosition(x, y);
-                    salle.deposerObjet(c);
-                }
+                // CLE:<Nom>:<Taille>:<CleId>:<x>:<y>
+                Cle c = new Cle(split[1], Integer.parseInt(split[2]), split[3]);
+                c.setPosition(x, y);
+                salle.deposerObjet(c);
+                break;
+
+            case "MONSTRE":
+                // MONSTRE:<NomArme>:<DegatArme>:<x>:<y>
+                Arme armeM = new Arme(split[1], 0, Integer.parseInt(split[2]));
+                Monstre m = new Monstre(armeM);
+                m.setPosition(x, y);
+                salle.ajouterPersonnage(m);
+                break;
+
+            case "ALLIE":
+                // ALLIE:<PV>:<Trahison>:<NomArme>:<DegatArme>:<x>:<y>
+                int pvAllie = Integer.parseInt(split[1]);
+                boolean trahison = split[2].trim().equalsIgnoreCase("OUI");
+                Arme armeA = new Arme(split[3], 0, Integer.parseInt(split[4]));
+                Allie allie = new Allie(pvAllie, trahison, armeA);
+                allie.setPosition(x, y);
+                salle.ajouterPersonnage(allie);
                 break;
             default:
                 break;

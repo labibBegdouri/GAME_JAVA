@@ -9,24 +9,21 @@ public class Food extends Item  {
     /**
      * Crée un objet Food avec les paramètres fournis.
      * @param nom nom de l’élément
-     * @param id identifiant de l’élément
      * @param size taille de l’élément
      * @param bonus valeur du bonus
      */
-    public Food(String nom, int id, int size, int bonus){
-            super(nom,id,size);
-            this.bonus=bonus;
-
+    public Food(String nom, int size, int bonus) {
+        super(nom, size);
+        this.bonus = bonus;
     }
 
     /**
      * Crée un objet Food avec les paramètres fournis.
      * @param nom nom de l’élément
-     * @param id identifiant de l’élément
      * @param bonus valeur du bonus
      */
-    public Food(String nom, int id, int bonus){
-            super(nom,id);
+    public Food(String nom,int bonus){
+            super(nom);
             this.bonus=bonus;
 
     }
@@ -53,7 +50,7 @@ public class Food extends Item  {
      * @return une représentation textuelle de l’objet.
      */
     public String toString(){
-        return "{ name = "+ getNom()+", Type = Food" + ", Bonus = "+getBonus()+" }" ;
+        return "{ name = "+ getNom()+", Type = Food" + ", Bonus = "+getBonus()+ ", Size = " + super.getSize() +  " }" ;
         
     }
 

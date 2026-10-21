@@ -9,11 +9,10 @@ public class Tresor extends Item {
 
     /**
      * Crée un objet Tresor avec les paramètres fournis.
-     * @param nom nom de l’élément
-     * @param id identifiant de l’élément
+     * @param size nom de l’élément
      */
-    public Tresor(String nom, int id){
-        super(nom,id);
+    public Tresor(int size) {
+        super("Tresor", size);
     }
     /**
      * Retourne une représentation textuelle de cet objet.

@@ -5,6 +5,7 @@ import SAC.*;
  */
 
 public class Monstre extends Personnage{
+    private static int compteur = 0;
     private static int pvCommuns = 50;
     private Arme arme;
 
@@ -24,12 +25,16 @@ public class Monstre extends Personnage{
         return pvCommuns;
     }
 
+    public static void resetCompteur() {
+        compteur = 0;
+    }
+
     /**
      * Crée un objet Monstre avec les paramètres fournis.
      * @param a arme utilisée
      */
     public Monstre(Arme a) {
-        super("MONSTRE", pvCommuns);
+        super("Monstre " + (++compteur), pvCommuns);
         this.arme = a;
     }
     

@@ -1,0 +1,24 @@
+# Format Salle   : Salle:<Nom>:<Hauteur>:<Largeur>:<x0>:<y0>
+# Format Porte   : PORTE:<Etat:O/F>:<CleId/TRESOR>:<SalleCible>:<x>:<y>
+# Format Monstre : MONSTRE:<NomArme>:<DegatArme>:<x>:<y>
+# Format Allie   : ALLIE:<PV>:<Trahison:OUI/NON>:<NomArme>:<DegatArme>:<x>:<y>
+# Format Arme    : ARME:<Nom>:<Taille>:<Degats>:<x>:<y>
+# Format Food    : FOOD:<Nom>:<Taille>:<SoinPV>:<x>:<y>
+# Format Cle     : CLE:<Nom>:<Taille>:<CleId>:<x>:<y>
+# Format Tresor  : TRESOR:<x>:<y>
+
+Salle:Depart:5:6:0:0
+PORTE:O:0:ChambreTresor:7:3
+REVEIL:2:3
+FOOD:Pomme:1:15:2:4
+ALLIE:25:NON:Dague:4:4:2
+
+Salle:ChambreTresor:5:6:7:0
+PORTE:F:TRESOR:Sortie:14:3
+ARME:EpeeCourte:1:8:9:4
+FOOD:Pain:1:10:10:2
+# Le monstre est posté SUR le trésor : combat 100% obligatoire
+MONSTRE:Gourdin:5:12:3
+TRESOR:12:3
+
+Salle:Sortie:3:3:14:1

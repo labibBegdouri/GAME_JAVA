@@ -1,5 +1,4 @@
-import Personnages.*;
-import MAPS.LecteurMaison.*;
+import Personnages.MenuConfig;
 /**
  * Point d’entrée du jeu : affiche le message d’accueil et démarre le menu.
  */

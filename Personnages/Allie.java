@@ -4,6 +4,7 @@ import SAC.*;
  * Allié du héros, doté de points de vie, d’une arme et d’un éventuel comportement traître.
  */
 public class Allie extends Personnage {
+    private static int compteur = 0;
     private Arme arme;
     private boolean trahison;
 
@@ -14,9 +15,13 @@ public class Allie extends Personnage {
      * @param a arme utilisée
      */
     public Allie(int pvInit,boolean trahison, Arme a){
-        super("ALLIE",pvInit);
+        super("Allie " + (++compteur), pvInit);
         this.trahison = trahison;
         this.arme = a;
+    }
+
+    public static void resetCompteur() {
+        compteur = 0;
     }
 
     /**

@@ -14,7 +14,8 @@ public class Salle{
     private String nom;
     private ArrayList<Item> objetParSol;
     private ArrayList<Personnage> personnages;
-    private Map<Direction, Porte> portes;
+    // private Map<Direction, Porte> portes;
+    private List<Porte> portes;
     private Position posInit;
     private int hauteur;
     private int largeur;
@@ -75,7 +76,7 @@ public class Salle{
         this.nom = nom;
         this.objetParSol = new ArrayList<Item>();
         this.personnages = new ArrayList<Personnage>();
-        this.portes = new HashMap<Direction,Porte>();
+        this.portes = new ArrayList<Porte>();
     }
     
     
@@ -88,21 +89,19 @@ public class Salle{
     }
 
     /**
-     * Associe une porte à la salle dans la direction donnée.
-     * @param dir direction de la porte
+     * Ajoute une porte dans la salle.
      * @param porte porte concernée
      */
-    public void addPorte(Direction dir, Porte porte){
-        this.portes.put(dir, porte);
+    public void addPorte(Porte porte) {
+        this.portes.add(porte);
     }
 
     /**
-     * Retourne la porte située dans la direction donnée.
-     * @param dir direction de la porte
-     * @return la porte associée à la direction, ou {@code null} si elle n’existe pas.
+     * Retourne les portes de la salle
+     * @return les portes de la salle, ou {@code null} si elles n’existent pas.
      */
-    public Porte getPorte(Direction dir){
-        return this.portes.get(dir);
+    public List<Porte> getPortes() {
+        return this.portes;
     }
 
 
@@ -146,14 +145,6 @@ public class Salle{
         this.personnages.remove(perso);
     }
 
-    /**
-     * Retourne les portes de la salle, indexées par direction.
-     * @return les portes de la salle, associées à leur direction.
-     */
-    public Map<Direction,Porte> getPortes(){
-        return this.portes;
-    }
-    
     /**
      * Retourne les personnages présents dans la salle.
      * @return la liste des personnages présents dans la salle.

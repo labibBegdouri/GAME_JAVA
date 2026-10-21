@@ -9,23 +9,21 @@ public class Cle extends Item {
     /**
      * Crée un objet Cle avec les paramètres fournis.
      * @param nom nom de l’élément
-     * @param id identifiant de l’élément
      * @param size taille de l’élément
      * @param cleId identifiant de clé ou de serrure
      */
-    public Cle(String nom, int id, int size, String cleId) {
-        super(nom, id, size);
+    public Cle(String nom, int size, String cleId) {
+        super(nom, size);
         this.cleId = cleId;
     }
 
     /**
      * Crée un objet Cle avec les paramètres fournis.
      * @param nom nom de l’élément
-     * @param id identifiant de l’élément
      * @param cleId identifiant de clé ou de serrure
      */
-    public Cle(String nom, int id, String cleId) {
-        super(nom, id); 
+    public Cle(String nom, String cleId) {
+        super(nom); 
         this.cleId = cleId;
     }
 
@@ -44,6 +42,6 @@ public class Cle extends Item {
      * @return une représentation textuelle de l’objet.
      */
     public String toString() {
-        return "{ Nom = " + getNom() + ", Type = Cle, Porte = " + this.cleId + " }";
+        return "{ Nom = " + getNom() + ", Type = Cle, Porte = " + this.cleId + ", Size = " + super.getSize() +  " }" ;
     }
 }

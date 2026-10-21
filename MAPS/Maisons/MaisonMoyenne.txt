@@ -1,0 +1,20 @@
+Salle:Hall:6:8:0:0
+PORTE:O:0:Couloir:9:2
+CLE:CleDoree:1:1:2:3
+ARME:Epee:2:12:5:1
+
+Salle:Couloir:6:10:9:0
+PORTE:F:1:SalleTresor:12:7
+PORTE:F:TRESOR:Sortie:20:3
+FOOD:Pomme:1:10:10:1
+ALLIE:30:NON:Dague:5:10:4
+REVEIL:14:1
+# Monstre 1 en (19, 3) : juste devant la porte de sortie (20, 3), passage obligé !
+MONSTRE:Massue:8:19:3
+
+Salle:SalleTresor:5:6:10:7
+# Monstre 2 en (14, 10) : posté sur le Trésor, combat obligatoire !
+MONSTRE:Hache:12:14:10
+TRESOR:14:10
+
+Salle:Sortie:4:4:20:1

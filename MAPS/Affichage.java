@@ -172,7 +172,7 @@ public class Affichage {
             }
         }
 
-        for (Porte porte : salle.getPortes().values()) {
+        for (Porte porte : salle.getPortes()) {
             int lx = porte.getPosition().getX() - x0;
             int ly = porte.getPosition().getY() - y0;
             if (lx >= 0 && lx <= l + 1 && ly >= 0 && ly <= h + 1) {

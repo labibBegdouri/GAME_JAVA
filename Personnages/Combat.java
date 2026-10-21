@@ -102,13 +102,13 @@ public class Combat {
             System.out.println("Aucune arme disponible.");
             return null;
         }
-        System.out.println("Choisis une arme :");
+        System.out.println("Choisis une arme (ou entre -1 pour annuler) :");
         for (int i = 0; i < armes.size(); i++) {
             Arme arme = armes.get(i);
             System.out.println(i + " : " + arme.getNom() + " (Degats : " + arme.getDegat() + ")");
         }
-        int index = lireEntier(scanner, "Arme :", 0, armes.size() - 1);
-        return armes.get(index);
+        int index = lireEntier(scanner, "Arme :", -1, armes.size() - 1);
+        return (index == -1) ? null : armes.get(index);
     }
 
     /**
@@ -127,41 +127,8 @@ public class Combat {
             Food food = consommables.get(j);
             System.out.println(j + " : " + food.getNom() + " (Soin : +" + food.getBonus() + " PV)");
         }
-        int index = lireEntier(scanner, "Nourriture :", 0, consommables.size() - 1);
-        return consommables.get(index);
-    }
-
-    /**
-     * Applique l’action choisie et retourne l’arme conservée pour le prochain tour.
-     * @param scanner scanner utilisé pour lire la saisie
-     * @param choix action choisie par le joueur
-     * @param a arme utilisée
-     * @param contre personnages du camp adverse
-     * @return l’arme à conserver pour l’action suivante.
-     */
-    public Arme gestionChoix(Scanner scanner, int choix, Arme a, List<Personnage> contre) {
-        switch (choix) {
-            case 1:
-                Personnage victime = choixMonstre(scanner, contre);
-                this.hero.attaquer(victime, a);
-                System.out.println("Tu as attaque " + victime.getNom() + " ! PV restant : " + victime.getPv());
-                if (victime.getEstMort()) {
-                    contre.remove(victime);
-                    System.out.println(victime.getNom() + " est vaincu !");
-                }
-                return a;
-            case 2:
-                Arme nouvelleArme = choixArme(scanner);
-                return (nouvelleArme != null) ? nouvelleArme : a;
-            case 3:
-                Food food = choixFood(scanner);
-                if (food != null) {
-                    this.hero.consommer(food);
-                    System.out.println("Tu as consomme " + food.getNom() + ". Tes PV : " + this.hero.getPv());
-                }
-                return a;
-        }
-        return a;
+        int index = lireEntier(scanner, "Choisis ce que tu veux consommer (ou -1 pour annuler) :", -1, consommables.size() - 1);
+        return (index == -1) ? null : consommables.get(index);
     }
 
     /**
@@ -177,7 +144,9 @@ public class Combat {
      */
     public void Combattre(Scanner scanner) {
         this.lancerCombat();
-        Arme armeChoisie = this.choixArme(scanner);
+
+        List<Arme> armesSac = this.hero.getArmesDuSac();
+        Arme armeCourante = !armesSac.isEmpty() ? armesSac.get(0) : null;
 
         List<Personnage> avec = new ArrayList<>(this.allies);
         avec.add(hero);
@@ -191,10 +160,43 @@ public class Combat {
         while (!this.hero.getEstMort() && !contre.isEmpty()) {
             aff.combatTour(avec, contre);
 
-            // Tour du heros
-            int choix = this.choixScanner(scanner);
-            armeChoisie = this.gestionChoix(scanner, choix, armeChoisie, contre);
+            // Tour du héros : recommence tant qu'une action finale (attaquer ou manger) n'a pas été exécutée
+            boolean actionValidee = false;
+            while (!actionValidee) {
+                int choix = this.choixScanner(scanner);
 
+                switch (choix) {
+                    case 1: // Attaquer
+                        Personnage victime = choixMonstre(scanner, contre);
+                        this.hero.attaquer(victime, armeCourante);
+                        String nomArme = (armeCourante != null) ? armeCourante.getNom() : "mains nues";
+                        System.out.println("Tu as attaque " + victime.getNom() + " avec " + nomArme + " ! PV restant : " + victime.getPv());
+
+                        if (victime.getEstMort()) {
+                            contre.remove(victime);
+                            System.out.println(victime.getNom() + " est vaincu !");
+                        }
+                        actionValidee = true;
+                        break;
+
+                    case 2: // Changer d'arme (ne consomme pas le tour d'attaque)
+                        Arme nouvelleArme = choixArme(scanner);
+                        if (nouvelleArme != null) {
+                            armeCourante = nouvelleArme;
+                            System.out.println("Tu t'equipes de : " + armeCourante.getNom());
+                        }
+                        break;
+
+                    case 3: // Manger
+                        Food food = choixFood(scanner);
+                        if (food != null) {
+                            this.hero.consommer(food);
+                            System.out.println("Tu as consomme " + food.getNom() + ". Tes PV : " + this.hero.getPv());
+                            actionValidee = true;
+                        }
+                        break;
+                }
+            }
             // Arret immediat si le camp adverse est elimine
             if (contre.isEmpty()) {
                 break;
@@ -234,6 +236,11 @@ public class Combat {
                 if (victime.getEstMort()) {
                     avec.remove(victime);
                     System.out.println(victime.getNom() + " est tombe au combat !");
+
+                    // Arrêt immédiat de la boucle ennemie si le héros meurt
+                    if (victime == this.hero) {
+                        break;
+                    }
                 }
             }
         }
