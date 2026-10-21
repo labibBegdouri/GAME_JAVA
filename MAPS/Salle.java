@@ -1,8 +1,5 @@
 package MAPS;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import java.util.List;
 import SAC.*;
 import Personnages.*;
