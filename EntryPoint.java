@@ -1,4 +1,4 @@
-import Personnages.MenuConfig;
+import Menu.MenuConfig;
 /**
  * Point d’entrée du jeu : affiche le message d’accueil et démarre le menu.
  */

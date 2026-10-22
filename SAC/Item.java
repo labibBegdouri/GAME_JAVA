@@ -2,7 +2,7 @@ package SAC;
 
 import java.util.Objects;
 
-import MAPS.*;
+import Position.Position;
 /**
  * Classe de base des objets du jeu, avec un nom, une taille et une position.
  */
@@ -95,13 +95,6 @@ public class  Item{
                Objects.equals(this.pos, other.pos);
     }
 
-    /**
-     * Calcule le code de hachage de cet objet.
-     * @return le code de hachage de l’objet.
-     */
-    public int hashCode() {
-        return Objects.hash(this.nom,this.size);
-    }
 
     /**
      * Retourne une représentation textuelle de cet objet.

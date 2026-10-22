@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import SAC.*;
 import Personnages.*;
+import Position.Position;
 /**
  * Salle contenant des objets, des personnages et des portes.
  */

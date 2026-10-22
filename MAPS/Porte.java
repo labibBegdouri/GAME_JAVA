@@ -1,4 +1,7 @@
 package MAPS;
+
+import Position.Position;
+
 /**
  * Porte reliant deux salles, éventuellement verrouillée par une clé ou le trésor.
  */

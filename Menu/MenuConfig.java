@@ -1,4 +1,4 @@
-package Personnages;
+package Menu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,19 +6,22 @@ import java.util.Scanner;
 
 import SAC.*;
 import MAPS.*;
+import Personnages.*;
+import Position.Position;
+
 /**
  * Configure la partie et gère les actions de l’aventure dans la console.
  */
 
 public class MenuConfig {
-    //couleurs   
+    // couleurs
     public static final String RESET = "\u001B[0m";
     public static final String ROUGE = "\u001B[31m";
-    public static final String VERT  = "\u001B[32m";
-
+    public static final String VERT = "\u001B[32m";
 
     /**
      * Demande et retourne un entier strictement positif.
+     * 
      * @param scanner scanner utilisé pour lire la saisie
      * @param message message affiché à l’utilisateur
      * @return un entier strictement positif saisi par l’utilisateur.
@@ -46,9 +49,11 @@ public class MenuConfig {
 
     /**
      * Décrit le contenu de la position observée dans la salle.
+     * 
      * @param salleCourante salle actuellement occupée
-     * @param p position observée
-     * @return une description de la position observée : son contenu, {@code LIBRE}, une porte ou un mur.
+     * @param p             position observée
+     * @return une description de la position observée : son contenu, {@code LIBRE},
+     *         une porte ou un mur.
      */
     public String radar(Salle salleCourante, Position p) {
         int x = p.getX();
@@ -72,26 +77,28 @@ public class MenuConfig {
                 }
             }
             if (contenu.isEmpty()) {
-                return VERT +"LIBRE"+ RESET;
+                return VERT + "LIBRE" + RESET;
             }
             return contenu;
         } else {
             for (Porte porte : salleCourante.getPortes()) {
                 if (p.equals(porte.getPosition())) {
                     if (porte.estFermee()) {
-                        return ROUGE +"Porte verrouille"+ RESET;
+                        return ROUGE + "Porte verrouille" + RESET;
                     }
-                    return VERT +"Porte ouverte"+ RESET ;
+                    return VERT + "Porte ouverte" + RESET;
                 }
             }
-            return ROUGE +"MUR"+ RESET;
+            return ROUGE + "MUR" + RESET;
         }
     }
 
     /**
      * Demande les paramètres de la partie, le choix de la carte et crée le héros.
+     * 
      * @param scanner scanner utilisé pour lire la saisie
-     * @return un tableau contenant le héros instancié et le chemin du fichier carte choisi
+     * @return un tableau contenant le héros instancié et le chemin du fichier carte
+     *         choisi
      */
     public Object[] demarageJeu(Scanner scanner) {
         System.out.println("==========================================");
@@ -102,14 +109,15 @@ public class MenuConfig {
         System.out.println("1 : Facile    (Petite carte, 1 monstre, allie loyal)");
         System.out.println("2 : Moyenne   (Carte standard, 2 monstres)");
         System.out.println("3 : Difficile (Labyrinthe, 3 monstres puissants, trahison)");
+        System.out.println("4 : Maison au choix ( elle doit vérifier la fourni dans le guide de jeu )");
 
         int choixMaison = 0;
-        while (choixMaison < 1 || choixMaison > 3) {
-            System.out.println("Choisis ta maison (1, 2 ou 3) :");
+        while (choixMaison < 1 || choixMaison > 4) {
+            System.out.println("Choisis ta maison (1, 2, 3 ou 4) :");
             if (scanner.hasNextInt()) {
                 choixMaison = scanner.nextInt();
-                if (choixMaison < 1 || choixMaison > 3) {
-                    System.out.println("Choix invalide. Entre 1, 2 ou 3.");
+                if (choixMaison < 1 || choixMaison > 4) {
+                    System.out.println("Choix invalide. Entre 1, 2, 3 ou 4.");
                 }
             } else {
                 System.out.println("Saisie invalide.");
@@ -134,6 +142,14 @@ public class MenuConfig {
                 System.out.println("\n[Maison Difficile sélectionnée]");
                 System.out.println("(Conseil : PV Héros: 30 | PV Monstres: 40 | Sac: 2)");
                 break;
+            case 4:
+                String pathMaison = "";
+                System.out.println("--- Le path ta maison (e.g: ./Maison.txt) ---");
+                pathMaison = scanner.next().trim();
+                System.err.println(pathMaison);
+                cheminCarte = pathMaison;
+                System.out.println("\n[Maison sélectionnée]");
+                break;
         }
 
         System.out.println("\n--- Configuration des attributs ---");
@@ -145,11 +161,12 @@ public class MenuConfig {
         Heros heros = new Heros(pvInit, cap);
         System.out.println("\nConfiguration terminée. L'aventure commence !\n");
 
-        return new Object[]{heros, cheminCarte};
+        return new Object[] { heros, cheminCarte };
     }
 
     /**
      * Place les alliés du héros à la position actuelle de celui-ci.
+     * 
      * @param heros héros concerné
      */
     private void setPositionAllie(Heros heros) {
@@ -160,14 +177,15 @@ public class MenuConfig {
         }
     }
 
-
     /**
      * Déplace le héros dans la direction indiquée et retourne la salle atteinte.
-     * @param scanner scanner utilisé pour lire la saisie
+     * 
+     * @param scanner       scanner utilisé pour lire la saisie
      * @param salleCourante salle actuellement occupée
-     * @param heros héros concerné
-     * @param dir direction de la porte
-     * @return la salle où se trouve le héros après le déplacement, ou la salle courante si le déplacement échoue.
+     * @param heros         héros concerné
+     * @param dir           direction de la porte
+     * @return la salle où se trouve le héros après le déplacement, ou la salle
+     *         courante si le déplacement échoue.
      */
     public Salle deplacement(Scanner scanner, Salle salleCourante, Heros heros, Direction dir) {
         int xCible = heros.getPosition().getX();
@@ -207,12 +225,15 @@ public class MenuConfig {
                     if (porte.necessiteTresor()) {
                         if (heros.possedeTresor()) {
                             porte.ouvrirAvecTresor();
-                            System.out.println(VERT + "Le Tresor scintille... La porte scellee s'ouvre devant toi !" + RESET);
+                            System.out.println(
+                                    VERT + "Le Tresor scintille... La porte scellee s'ouvre devant toi !" + RESET);
                         } else {
-                            System.out.println(ROUGE + "Cette porte est scellee par une magie ancienne. Seul le Tresor peut la deverrouiller !" + RESET);
+                            System.out.println(ROUGE
+                                    + "Cette porte est scellee par une magie ancienne. Seul le Tresor peut la deverrouiller !"
+                                    + RESET);
                             return salleCourante;
                         }
-                    }else {
+                    } else {
                         Cle cleTrouvee = null;
                         for (Item obj : heros.getSac().getSAC()) {
                             if (obj instanceof Cle) {
@@ -225,12 +246,13 @@ public class MenuConfig {
                         }
 
                         if (cleTrouvee == null) {
-                            System.out.println(ROUGE +"La porte est verrouillee ! Tu n'as pas la bonne cle."+ RESET);
+                            System.out.println(ROUGE + "La porte est verrouillee ! Tu n'as pas la bonne cle." + RESET);
                             return salleCourante;
                         }
 
                         heros.getSac().remove(cleTrouvee);
-                        System.out.println(VERT +"Porte ouverte avec succes avec la cle " + cleTrouvee.getNom() + " !"+ RESET);
+                        System.out.println(
+                                VERT + "Porte ouverte avec succes avec la cle " + cleTrouvee.getNom() + " !" + RESET);
                     }
                 }
 
@@ -260,8 +282,9 @@ public class MenuConfig {
 
     /**
      * Ramasse l’objet situé sous le héros si le sac peut le contenir.
+     * 
      * @param salleCourante salle actuellement occupée
-     * @param heros héros concerné
+     * @param heros         héros concerné
      */
     public void ramasser(Salle salleCourante, Heros heros) {
         List<Item> objSalle = salleCourante.getObjetsParSol();
@@ -277,23 +300,26 @@ public class MenuConfig {
         if (objCible != null) {
             if (heros.getSac().collect(objCible)) {
                 salleCourante.prendreObjet(objCible);
-                if (objCible instanceof Tresor){
-                    System.out.println(VERT + "Felicitation ! Tu as recupere le Tresor et maintenant tu dois chercher la sortie !" + RESET);
+                if (objCible instanceof Tresor) {
+                    System.out.println(
+                            VERT + "Felicitation ! Tu as recupere le Tresor et maintenant tu dois chercher la sortie !"
+                                    + RESET);
                 }
-                System.out.println(VERT +"Objet ajoute au Sac"+ RESET);
+                System.out.println(VERT + "Objet ajoute au Sac" + RESET);
             } else {
-                System.out.println(ROUGE +"Sac rempli"+ RESET);
+                System.out.println(ROUGE + "Sac rempli" + RESET);
             }
-        }else {
-            System.out.println(ROUGE +"Il n'y a rien a ramasser sur cette case."+ RESET);
+        } else {
+            System.out.println(ROUGE + "Il n'y a rien a ramasser sur cette case." + RESET);
         }
     }
 
     /**
      * Permet au heros de choisir et deposer un objet de son sac dans la salle.
-     * @param scanner scanner utilise pour lire la saisie
+     * 
+     * @param scanner       scanner utilise pour lire la saisie
      * @param salleCourante salle actuellement occupee
-     * @param heros heros concerne
+     * @param heros         heros concerne
      */
     public void deposer(Scanner scanner, Salle salleCourante, Heros heros) {
         Sac sac = heros.getSac();
@@ -338,8 +364,9 @@ public class MenuConfig {
 
     /**
      * Permet au héros de choisir et consommer un aliment de son sac.
+     * 
      * @param scanner scanner utilisé pour lire la saisie
-     * @param heros héros concerné
+     * @param heros   héros concerné
      */
     public void manger(Scanner scanner, Heros heros) {
         Sac sac = heros.getSac();
@@ -380,7 +407,7 @@ public class MenuConfig {
             } else {
                 System.out.println("Choisis bien qlq chose de mangeable");
             }
-            
+
         }
     }
 
@@ -392,7 +419,8 @@ public class MenuConfig {
 
         Object[] config = demarageJeu(scanner);
         Heros heros = (Heros) config[0];
-        String cheminCarte = (String) config[1];;
+        String cheminCarte = (String) config[1];
+        ;
 
         Affichage aff = new Affichage(heros);
 
@@ -403,7 +431,8 @@ public class MenuConfig {
 
         heros.getSac().collect(new Arme("Dague rouillee", 0, 3));
 
-        ArrayList<String> options = new ArrayList<>(List.of("L", "K", "J", "H", "P", "Z", "D", "S", "Q"));        Salle salleCourante = maison.getSalleReveil();
+        ArrayList<String> options = new ArrayList<>(List.of("L", "K", "J", "H", "P", "Z", "D", "S", "Q"));
+        Salle salleCourante = maison.getSalleReveil();
 
         while (!heros.getEstMort()) {
             ArrayList<Personnage> personnages = new ArrayList<>(salleCourante.getPersonnages());
@@ -418,7 +447,7 @@ public class MenuConfig {
                         Monstre m = (Monstre) pers;
                         ArrayList<Allie> vraiAllie = new ArrayList<>();
                         ArrayList<Allie> allieTraitre = new ArrayList<>();
-                    
+
                         for (Allie a : heros.getAllieHeros()) {
                             if (a.getTrahison()) {
                                 a.setNom("Traitre " + numTraitre);
@@ -448,7 +477,7 @@ public class MenuConfig {
                         }
 
                         if (heros.getEstMort()) {
-                            break; 
+                            break;
                         }
                     }
                 }
@@ -460,9 +489,12 @@ public class MenuConfig {
             }
 
             if (salleCourante.getSalleNom().equals("Sortie")) {
-                System.out.println(VERT + "======================================================================" + RESET);
-                System.out.println(VERT + " VICTOIRE ! Tu as ouvert la porte avec le Tresor et tu t'es echappe !" + RESET);
-                System.out.println(VERT + "======================================================================" + RESET);
+                System.out.println(
+                        VERT + "======================================================================" + RESET);
+                System.out.println(
+                        VERT + " VICTOIRE ! Tu as ouvert la porte avec le Tresor et tu t'es echappe !" + RESET);
+                System.out.println(
+                        VERT + "======================================================================" + RESET);
                 break;
             }
 

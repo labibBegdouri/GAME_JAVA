@@ -1,6 +1,8 @@
 package MAPS;
 import java.util.HashMap;
 import java.util.Map;
+
+import Position.Position;
 /**
  * Contient les salles de la maison ainsi que les emplacements du réveil et du trésor.
  */

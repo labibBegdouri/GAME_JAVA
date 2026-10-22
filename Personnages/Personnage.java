@@ -1,7 +1,7 @@
 package Personnages;
 
 import SAC.*;
-import MAPS.*;
+import Position.Position;
 /**
  * Base commune aux personnages, qui définit leur identité, leurs points de vie et leur position.
  */

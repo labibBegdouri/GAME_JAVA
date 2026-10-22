@@ -1,4 +1,4 @@
-package MAPS;
+package Position;
 
 import java.util.Objects;
 /**
@@ -55,15 +55,6 @@ public class Position {
         }
         return false;
     }
-
-    /**
-     * Calcule le code de hachage de cet objet.
-     * @return le code de hachage de l’objet.
-     */
-    public int hashCode(){  //A rediscuter hh
-        return Objects.hash(this.x, this.y);
-    }
-
     /**
      * Retourne une représentation textuelle de cet objet.
      * @return une représentation textuelle de l’objet.
