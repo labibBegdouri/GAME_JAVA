@@ -140,7 +140,7 @@ public class MenuConfig {
             case 3:
                 cheminCarte = "./MAPS/Maisons/MaisonDifficile.txt";
                 System.out.println("\n[Maison Difficile sélectionnée]");
-                System.out.println("(Conseil : PV Héros: 30 | PV Monstres: 40 | Sac: 2)");
+                System.out.println("(Conseil : PV Héros: 30 | PV Monstres: 35 | Sac: 3)");
                 break;
             case 4:
                 String pathMaison = "";
