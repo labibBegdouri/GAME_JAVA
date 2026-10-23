@@ -30,7 +30,7 @@ Le projet se compile et s'exécute à l'aide du `Makefile` fourni à la racine :
 
 Pour le détail complet des règles du jeu, le fonctionnement du radar, le système de combat et d'alliance, ainsi que le guide détaillé des commandes, veuillez consulter le document PDF inclus :
 
-* `documentation_utilisateur.pdf`
+* `documentation_jeu.pdf`
 
 ## Structure de l'archive
 
@@ -62,7 +62,10 @@ Pour le détail complet des règles du jeu, le fonctionnement du radar, le syst�
 
 * `Salle.java` : Modélisation d'une salle (dimensions, portes, objets et personnages).
 
+### Position / 
+* `Position.java` : Modélisation des coordonnées géométriques bidimensionnelles (x, y).
 ### Personnages / (Module des entités vivantes et du combat)
+
 
 * `Allie.java` : Gestion des personnages secondaires et de leur statut de trahison.
 
@@ -70,7 +73,6 @@ Pour le détail complet des règles du jeu, le fonctionnement du radar, le syst�
 
 * `Heros.java` : Personnage principal incarné (points de vie, sac, gestion des alliés).
 
-* `MenuConfig.java` : Boucle principale du jeu, radar et gestion des interactions joueur.
 
 * `Monstre.java` : Gestion des ennemis, de leur arme et de leurs points de vie communs.
 
@@ -89,3 +91,8 @@ Pour le détail complet des règles du jeu, le fonctionnement du radar, le syst�
 * `Sac.java` : Gestionnaire de l'inventaire du héros (capacité et encombrement).
 
 * `Tresor.java` : Objet unique nécessaire pour déverrouiller la porte de sortie.
+
+  
+### Menu / (L'interface interactif)
+
+* `MenuConfig.java` : Boucle principale du jeu, radar et gestion des interactions joueur.
